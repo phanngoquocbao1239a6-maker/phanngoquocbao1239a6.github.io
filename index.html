@@ -1,2 +1,134 @@
 <h1>Hello Bao 🚀</h1>
 <p>Web của mình chạy rồi</p>
+using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.Windows.Forms;
+
+// FORM DANG NHAP
+public partial class FORMDANGNHAP : Form
+{
+    SqlConnection conn = new SqlConnection(@"Data Source=.\SQLEXPRESS;Initial Catalog=QLLKDT;User ID=sa;Password=123");
+    public FORMDANGNHAP() { InitializeComponent(); }
+
+    private void FORMDANGNHAP_Load(object sender, EventArgs e)
+    {
+        txtMatKhau.PasswordChar = '*';
+        this.AcceptButton = btnDangNhap;
+    }
+
+    private void btnDangNhap_Click(object sender, EventArgs e)
+    {
+        string sql = "SELECT Quyen FROM TaiKhoan WHERE TenDangNhap=@u AND MatKhau=@p";
+        SqlCommand cmd = new SqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("@u", txtTenDangNhap.Text);
+        cmd.Parameters.AddWithValue("@p", txtMatKhau.Text);
+        conn.Open();
+        object kq = cmd.ExecuteScalar();
+        conn.Close();
+
+        if (kq == null) MessageBox.Show("Sai tài khoản hoặc mật khẩu!");
+        else if (kq.ToString() == "User")
+        {
+            this.Hide();
+            new FORMQUANLYNHACUNGCAP().ShowDialog();
+            this.Show();
+        }
+        else
+        {
+            this.Hide();
+            new FORM_QUANLYLINHKIENDIENTU().ShowDialog();
+            this.Show();
+        }
+    }
+}
+
+// FORM QUAN LY
+public partial class FORM_QUANLYLINHKIENDIENTU : Form
+{
+    SqlConnection conn = new SqlConnection(@"Data Source=.\SQLEXPRESS;Initial Catalog=QLLKDT;User ID=sa;Password=123");
+    public FORM_QUANLYLINHKIENDIENTU() { InitializeComponent(); }
+
+    public void LoadData()
+    {
+        SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM LinhKien", conn);
+        DataTable dt = new DataTable();
+        da.Fill(dt);
+        dataGridView1.DataSource = dt;
+    }
+
+    public void LoadCombo()
+    {
+        SqlDataAdapter da = new SqlDataAdapter("SELECT MaNCC, TenNCC FROM NhaCungCap", conn);
+        DataTable dt = new DataTable();
+        da.Fill(dt);
+        cboNCC.DataSource = dt;
+        cboNCC.DisplayMember = "TenNCC";
+        cboNCC.ValueMember = "MaNCC";
+    }
+
+    public void LamLai()
+    {
+        txtMaLK.Clear(); txtTenLK.Clear(); txtThongSo.Clear(); txtDonGia.Clear();
+        if (cboNCC.Items.Count > 0) cboNCC.SelectedIndex = 0;
+        txtMaLK.Enabled = true; btnThem.Enabled = true; txtMaLK.Focus();
+    }
+
+    private void FORM_QUANLYLINHKIENDIENTU_Load(object sender, EventArgs e)
+    {
+        LoadData(); LoadCombo(); LamLai();
+        this.WindowState = FormWindowState.Maximized;
+    }
+
+    private void btnThem_Click(object sender, EventArgs e)
+    {
+        string sql = "INSERT INTO LinhKien VALUES(@Ma,@Ten,@ThongSo,@Gia,@MaNCC)";
+        SqlCommand cmd = new SqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("@Ma", txtMaLK.Text);
+        cmd.Parameters.AddWithValue("@Ten", txtTenLK.Text);
+        cmd.Parameters.AddWithValue("@ThongSo", txtThongSo.Text);
+        cmd.Parameters.AddWithValue("@Gia", txtDonGia.Text);
+        cmd.Parameters.AddWithValue("@MaNCC", cboNCC.SelectedValue);
+        conn.Open(); cmd.ExecuteNonQuery(); conn.Close();
+        LoadData(); LamLai();
+    }
+
+    private void btnSua_Click(object sender, EventArgs e)
+    {
+        string sql = "UPDATE LinhKien SET TenLK=@Ten, ThongSoKyThuat=@ThongSo, DonGia=@Gia, MaNCC=@MaNCC WHERE MaLK=@Ma";
+        SqlCommand cmd = new SqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("@Ma", txtMaLK.Text);
+        cmd.Parameters.AddWithValue("@Ten", txtTenLK.Text);
+        cmd.Parameters.AddWithValue("@ThongSo", txtThongSo.Text);
+        cmd.Parameters.AddWithValue("@Gia", txtDonGia.Text);
+        cmd.Parameters.AddWithValue("@MaNCC", cboNCC.SelectedValue);
+        conn.Open(); cmd.ExecuteNonQuery(); conn.Close();
+        LoadData(); LamLai();
+    }
+
+    private void btnXoa_Click(object sender, EventArgs e)
+    {
+        string sql = "DELETE FROM LinhKien WHERE MaLK=@Ma";
+        SqlCommand cmd = new SqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("@Ma", txtMaLK.Text);
+        conn.Open(); cmd.ExecuteNonQuery(); conn.Close();
+        LoadData(); LamLai();
+    }
+
+    private void btnLamLai_Click(object sender, EventArgs e) { LamLai(); }
+    private void btnThoat_Click(object sender, EventArgs e) { Application.Exit(); }
+
+    private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+    {
+        int i = e.RowIndex;
+        if (i >= 0)
+        {
+            txtMaLK.Text = dataGridView1.Rows[i].Cells["MaLK"].Value.ToString();
+            txtTenLK.Text = dataGridView1.Rows[i].Cells["TenLK"].Value.ToString();
+            txtThongSo.Text = dataGridView1.Rows[i].Cells["ThongSoKyThuat"].Value.ToString();
+            txtDonGia.Text = dataGridView1.Rows[i].Cells["DonGia"].Value.ToString();
+            cboNCC.SelectedValue = dataGridView1.Rows[i].Cells["MaNCC"].Value.ToString();
+            txtMaLK.Enabled = false; btnThem.Enabled = false;
+        }
+    }
+}
