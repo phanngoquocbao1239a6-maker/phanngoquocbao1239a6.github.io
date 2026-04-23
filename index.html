@@ -164,6 +164,219 @@ public partial class FORM_QUANLYLINHKIENDIENTU : Form
         }
     }
 }
+-------------------------------
+  using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.Windows.Forms;
+
+namespace QuanLySinhVienApp
+{
+    public partial class Form1 : Form
+    {
+        string connectionString = @"Server=.;Database=QuanLySinhVien;Integrated Security=True";
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            LoadData();
+        }
+
+        private void LoadData()
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                string query = "SELECT * FROM SinhVien";
+                SqlDataAdapter da = new SqlDataAdapter(query, conn);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                dgvSinhVien.DataSource = dt;
+
+                dgvSinhVien.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                if (dgvSinhVien.Columns.Count >= 3)
+                {
+                    dgvSinhVien.Columns["MaSV"].HeaderText = "Mã SV";
+                    dgvSinhVien.Columns["HoTen"].HeaderText = "Họ tên";
+                    dgvSinhVien.Columns["DiemTB"].HeaderText = "Điểm TB";
+                }
+            }
+        }
+
+        private bool KiemTraNhap()
+        {
+            if (txtMaSV.Text.Trim() == "" || txtHoTen.Text.Trim() == "" || txtDiemTB.Text.Trim() == "")
+            {
+                MessageBox.Show("Vui lòng nhập đầy đủ thông tin.");
+                return false;
+            }
+
+            if (!double.TryParse(txtDiemTB.Text, out double diem))
+            {
+                MessageBox.Show("Điểm trung bình phải là số.");
+                return false;
+            }
+
+            if (diem < 0 || diem > 10)
+            {
+                MessageBox.Show("Điểm trung bình phải từ 0 đến 10.");
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool MaSVTonTai(string maSV)
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                string query = "SELECT COUNT(*) FROM SinhVien WHERE MaSV=@MaSV";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@MaSV", maSV);
+                conn.Open();
+                int count = (int)cmd.ExecuteScalar();
+                return count > 0;
+            }
+        }
+
+        private void btnThem_Click(object sender, EventArgs e)
+        {
+            if (!KiemTraNhap()) return;
+            if (MaSVTonTai(txtMaSV.Text.Trim()))
+            {
+                MessageBox.Show("Mã sinh viên đã tồn tại.");
+                return;
+            }
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                string query = "INSERT INTO SinhVien(MaSV, HoTen, DiemTB) VALUES(@MaSV, @HoTen, @DiemTB)";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@MaSV", txtMaSV.Text.Trim());
+                cmd.Parameters.AddWithValue("@HoTen", txtHoTen.Text.Trim());
+                cmd.Parameters.AddWithValue("@DiemTB", double.Parse(txtDiemTB.Text));
+
+                conn.Open();
+                cmd.ExecuteNonQuery();
+                MessageBox.Show("Thêm thành công.");
+                LoadData();
+                XoaTrang();
+            }
+        }
+
+        private void btnSua_Click(object sender, EventArgs e)
+        {
+            if (!KiemTraNhap()) return;
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                string query = "UPDATE SinhVien SET HoTen=@HoTen, DiemTB=@DiemTB WHERE MaSV=@MaSV";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@MaSV", txtMaSV.Text.Trim());
+                cmd.Parameters.AddWithValue("@HoTen", txtHoTen.Text.Trim());
+                cmd.Parameters.AddWithValue("@DiemTB", double.Parse(txtDiemTB.Text));
+
+                conn.Open();
+                int kq = cmd.ExecuteNonQuery();
+                if (kq > 0)
+                {
+                    MessageBox.Show("Sửa thành công.");
+                    LoadData();
+                    XoaTrang();
+                }
+                else
+                {
+                    MessageBox.Show("Không tìm thấy mã sinh viên để sửa.");
+                }
+            }
+        }
+
+        private void btnXoa_Click(object sender, EventArgs e)
+        {
+            if (txtMaSV.Text.Trim() == "")
+            {
+                MessageBox.Show("Chọn sinh viên cần xóa.");
+                return;
+            }
+
+            DialogResult r = MessageBox.Show("Bạn có chắc muốn xóa?", "Thông báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (r == DialogResult.No) return;
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                string query = "DELETE FROM SinhVien WHERE MaSV=@MaSV";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@MaSV", txtMaSV.Text.Trim());
+
+                conn.Open();
+                int kq = cmd.ExecuteNonQuery();
+                if (kq > 0)
+                {
+                    MessageBox.Show("Xóa thành công.");
+                    LoadData();
+                    XoaTrang();
+                }
+                else
+                {
+                    MessageBox.Show("Không tìm thấy mã sinh viên để xóa.");
+                }
+            }
+        }
+
+        private void btnTim_Click(object sender, EventArgs e)
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                string query = "SELECT * FROM SinhVien WHERE MaSV LIKE @tk OR HoTen LIKE @tk";
+                SqlDataAdapter da = new SqlDataAdapter(query, conn);
+                da.SelectCommand.Parameters.AddWithValue("@tk", "%" + txtTim.Text.Trim() + "%");
+
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                dgvSinhVien.DataSource = dt;
+            }
+        }
+
+        private void btnHienThi_Click(object sender, EventArgs e)
+        {
+            LoadData();
+        }
+
+        private void btnLamMoi_Click(object sender, EventArgs e)
+        {
+            XoaTrang();
+            LoadData();
+        }
+
+        private void btnThoat_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void XoaTrang()
+        {
+            txtMaSV.Clear();
+            txtHoTen.Clear();
+            txtDiemTB.Clear();
+            txtTim.Clear();
+            txtMaSV.Focus();
+        }
+
+        private void dgvSinhVien_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                txtMaSV.Text = dgvSinhVien.Rows[e.RowIndex].Cells["MaSV"].Value.ToString();
+                txtHoTen.Text = dgvSinhVien.Rows[e.RowIndex].Cells["HoTen"].Value.ToString();
+                txtDiemTB.Text = dgvSinhVien.Rows[e.RowIndex].Cells["DiemTB"].Value.ToString();
+            }
+        }
+    }
+}
+  
 </pre>
 
 </body>
