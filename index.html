@@ -1,383 +1,254 @@
 <!doctype html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Code của Bao</title>
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lịch học tháng - Học kỳ 2, 2025-2026</title>
   <style>
-    body {
-      font-family: Arial;
-      background: #111;
-      color: #eee;
-      padding: 20px;
+    :root {
+      --bg: #f6f8fc;
+      --card: #ffffff;
+      --line: #d9e1ef;
+      --text: #172033;
+      --muted: #667085;
+      --blue: #2445b8;
+      --orange: #f97316;
+      --red: #dc2626;
+      --green: #15803d;
     }
-
-    h1 { margin-bottom: 10px; }
-
-    pre {
-      background: #1e1e1e;
-      padding: 15px;
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    .top {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(22px, 4vw, 34px);
+      color: var(--blue);
+    }
+    .controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    button, select {
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-weight: 650;
+      cursor: pointer;
+    }
+    button:hover, select:hover { border-color: var(--blue); }
+    .calendar {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+    }
+    .month-title {
+      padding: 18px;
+      background: var(--blue);
+      color: white;
+      font-size: 22px;
+      font-weight: 800;
+      text-align: center;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+    }
+    .dow {
+      padding: 12px 8px;
+      text-align: center;
+      font-weight: 800;
+      background: #eef2ff;
+      border-bottom: 1px solid var(--line);
+      color: var(--blue);
+    }
+    .day {
+      min-height: 142px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 8px;
+      background: #fff;
+    }
+    .day:nth-child(7n) { border-right: 0; }
+    .date {
+      font-weight: 800;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .other { background: #f8fafc; }
+    .other .date { opacity: .35; }
+    .event {
+      margin: 6px 0;
+      padding: 7px 8px;
       border-radius: 10px;
-      overflow-x: auto;
-      white-space: pre;
-      font-family: Consolas;
+      font-size: 12px;
+      line-height: 1.35;
+      border-left: 4px solid var(--blue);
+      background: #eef2ff;
+    }
+    .event .time { font-weight: 800; }
+    .event .name { font-weight: 750; }
+    .net { border-left-color: var(--blue); background: #eef2ff; }
+    .tm { border-left-color: var(--orange); background: #fff7ed; }
+    .qp { border-left-color: var(--green); background: #ecfdf5; }
+    .exam { border-left-color: var(--red); background: #fef2f2; }
+    .legend {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      color: var(--muted);
       font-size: 14px;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 999px; display: inline-block; margin-right: 6px; }
+    .blue { background: var(--blue); }
+    .orange { background: var(--orange); }
+    .green { background: var(--green); }
+    .red { background: var(--red); }
+    @media (max-width: 760px) {
+      .wrap { padding: 12px; }
+      .grid { display: block; }
+      .dow { display: none; }
+      .day { min-height: auto; border-right: 0; }
+      .other { display: none; }
+      .date::before { content: attr(data-dow) " - "; color: var(--blue); }
     }
   </style>
 </head>
-
 <body>
+  <div class="wrap">
+    <div class="top">
+      <h1>Lịch học theo tháng</h1>
+      <div class="controls">
+        <button id="prev">‹ Tháng trước</button>
+        <select id="month"></select>
+        <button id="next">Tháng sau ›</button>
+      </div>
+    </div>
 
-<h1>Chào Bao 🚀</h1>
-<p>Web mà mình đã chạy rồi</p>
+    <div class="calendar">
+      <div class="month-title" id="title"></div>
+      <div class="grid" id="calendar"></div>
+    </div>
 
-<pre>
-using System;
-using System.Data;
-using System.Data.SqlClient;
-using System.Windows.Forms;
+    <div class="legend">
+      <span><i class="dot blue"></i>Lập trình .NET</span>
+      <span><i class="dot orange"></i>Thương mại điện tử</span>
+      <span><i class="dot green"></i>QP2104</span>
+      <span><i class="dot red"></i>Kiểm tra</span>
+    </div>
+  </div>
 
-// FORM DANG NHAP
-public partial class FORMDANGNHAP : Form
-{
-    SqlConnection conn = new SqlConnection(@"Data Source=.\SQLEXPRESS;Initial Catalog=QLLKDT;User ID=sa;Password=123");
-    public FORMDANGNHAP() { InitializeComponent(); }
+  <script>
+    const events = [
+      // Lập trình .NET
+      ...['2026-01-26','2026-02-02','2026-02-09','2026-02-16','2026-03-02','2026-03-09','2026-03-16','2026-03-23','2026-03-30','2026-04-06'].map(date => ({ date, time:'07:00–08:20', name:'Lập trình .NET', room:'C0902', cls:'net' })),
+      ...['2026-01-28','2026-02-04','2026-03-04','2026-03-11','2026-03-18','2026-03-25','2026-04-01'].map(date => ({ date, time:'07:00–08:20', name:'Lập trình .NET', room:'C0902', cls:'net' })),
+      ...['2026-03-10','2026-03-17','2026-03-24','2026-03-31','2026-04-07'].map(date => ({ date, time:'12:30–17:30', name:'Lập trình .NET', room:'A0206 - Máy tính 6', cls:'net' })),
+      ...['2026-03-12','2026-03-19','2026-03-26','2026-04-02','2026-04-09'].map(date => ({ date, time:'12:30–17:30', name:'Lập trình .NET', room:'A0206 - Máy tính 6', cls:'net' })),
+      { date:'2026-04-24', time:'08:30', name:'KIỂM TRA KTHP - Lập trình .NET', room:'A0204 - Máy tính 3', cls:'exam' },
 
-    private void FORMDANGNHAP_Load(object sender, EventArgs e)
-    {
-        txtMatKhau.PasswordChar = '*';
-        this.AcceptButton = btnDangNhap;
+      // Thương mại điện tử
+      ...['2026-05-05','2026-05-12','2026-05-19','2026-05-26','2026-06-02','2026-06-09','2026-06-16','2026-06-23'].map(date => ({ date, time:'09:30–10:50', name:'Thương mại điện tử', room:'B0210', cls:'tm' })),
+      ...['2026-05-07','2026-05-14','2026-05-21','2026-05-28','2026-06-04','2026-06-11','2026-06-18'].map(date => ({ date, time:'09:30–10:50', name:'Thương mại điện tử', room:'B0210', cls:'tm' })),
+      ...['2026-05-27','2026-06-03','2026-06-10','2026-06-17','2026-06-24'].map(date => ({ date, time:'12:30–17:30', name:'Thương mại điện tử', room:'A0204 - Máy tính 3', cls:'tm' })),
+
+      // Quốc phòng
+      ...['2026-05-08','2026-05-15','2026-05-22','2026-05-29','2026-06-05','2026-06-12','2026-06-19'].map(date => ({ date, time:'06:30–11:30', name:'QP2104 - Kỹ thuật chiến đấu bộ binh và chiến thuật', room:'VLU_Nhà thi đấu 1', cls:'qp' })),
+      ...['2026-05-09','2026-05-16','2026-05-23'].map(date => ({ date, time:'06:30–11:30', name:'QP2104 - Kỹ thuật chiến đấu bộ binh và chiến thuật', room:'VLU_Nhà thi đấu 1', cls:'qp' }))
+    ];
+
+    const months = [
+      { y: 2026, m: 0, label: 'Tháng 1/2026' },
+      { y: 2026, m: 1, label: 'Tháng 2/2026' },
+      { y: 2026, m: 2, label: 'Tháng 3/2026' },
+      { y: 2026, m: 3, label: 'Tháng 4/2026' },
+      { y: 2026, m: 4, label: 'Tháng 5/2026' },
+      { y: 2026, m: 5, label: 'Tháng 6/2026' }
+    ];
+    const dows = ['Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy','Chủ Nhật'];
+    let current = 2;
+
+    const monthSelect = document.getElementById('month');
+    months.forEach((x, i) => {
+      const opt = document.createElement('option');
+      opt.value = i;
+      opt.textContent = x.label;
+      monthSelect.appendChild(opt);
+    });
+    monthSelect.addEventListener('change', e => { current = Number(e.target.value); render(); });
+    document.getElementById('prev').onclick = () => { current = Math.max(0, current - 1); render(); };
+    document.getElementById('next').onclick = () => { current = Math.min(months.length - 1, current + 1); render(); };
+
+    function isoDate(y, m, d) {
+      return `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
     }
-
-    private void btnDangNhap_Click(object sender, EventArgs e)
-    {
-        string sql = "SELECT Quyen FROM TaiKhoan WHERE TenDangNhap=@u AND MatKhau=@p";
-        SqlCommand cmd = new SqlCommand(sql, conn);
-        cmd.Parameters.AddWithValue("@u", txtTenDangNhap.Text);
-        cmd.Parameters.AddWithValue("@p", txtMatKhau.Text);
-        conn.Open();
-        object kq = cmd.ExecuteScalar();
-        conn.Close();
-
-        if (kq == null) MessageBox.Show("Sai tài khoản hoặc mật khẩu!");
-        else if (kq.ToString() == "User")
-        {
-            this.Hide();
-            new FORMQUANLYNHACUNGCAP().ShowDialog();
-            this.Show();
-        }
-        else
-        {
-            this.Hide();
-            new FORM_QUANLYLINHKIENDIENTU().ShowDialog();
-            this.Show();
-        }
+    function mondayIndex(date) {
+      return (date.getDay() + 6) % 7;
     }
-}
-
-// FORM QUAN LY
-public partial class FORM_QUANLYLINHKIENDIENTU : Form
-{
-    SqlConnection conn = new SqlConnection(@"Data Source=.\SQLEXPRESS;Initial Catalog=QLLKDT;User ID=sa;Password=123");
-    public FORM_QUANLYLINHKIENDIENTU() { InitializeComponent(); }
-
-    public void LoadData()
-    {
-        SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM LinhKien", conn);
-        DataTable dt = new DataTable();
-        da.Fill(dt);
-        dataGridView1.DataSource = dt;
+    function render() {
+      const { y, m, label } = months[current];
+      document.getElementById('title').textContent = label;
+      monthSelect.value = current;
+      const cal = document.getElementById('calendar');
+      cal.innerHTML = '';
+      dows.forEach(d => {
+        const el = document.createElement('div');
+        el.className = 'dow';
+        el.textContent = d;
+        cal.appendChild(el);
+      });
+      const first = new Date(y, m, 1);
+      const daysInMonth = new Date(y, m + 1, 0).getDate();
+      const startBlank = mondayIndex(first);
+      const totalCells = Math.ceil((startBlank + daysInMonth) / 7) * 7;
+      for (let i = 0; i < totalCells; i++) {
+        const dayNum = i - startBlank + 1;
+        const cell = document.createElement('div');
+        cell.className = 'day';
+        if (dayNum < 1 || dayNum > daysInMonth) {
+          cell.classList.add('other');
+          cal.appendChild(cell);
+          continue;
+        }
+        const dateStr = isoDate(y, m, dayNum);
+        const date = document.createElement('div');
+        date.className = 'date';
+        date.dataset.dow = dows[i % 7];
+        date.textContent = dayNum;
+        cell.appendChild(date);
+        events.filter(e => e.date === dateStr).forEach(e => {
+          const item = document.createElement('div');
+          item.className = `event ${e.cls}`;
+          item.innerHTML = `<div class="time">${e.time}</div><div class="name">${e.name}</div><div>${e.room}</div>`;
+          cell.appendChild(item);
+        });
+        cal.appendChild(cell);
+      }
     }
-
-    public void LoadCombo()
-    {
-        SqlDataAdapter da = new SqlDataAdapter("SELECT MaNCC, TenNCC FROM NhaCungCap", conn);
-        DataTable dt = new DataTable();
-        da.Fill(dt);
-        cboNCC.DataSource = dt;
-        cboNCC.DisplayMember = "TenNCC";
-        cboNCC.ValueMember = "MaNCC";
-    }
-
-    public void LamLai()
-    {
-        txtMaLK.Clear(); txtTenLK.Clear(); txtThongSo.Clear(); txtDonGia.Clear();
-        if (cboNCC.Items.Count > 0) cboNCC.SelectedIndex = 0;
-        txtMaLK.Enabled = true; btnThem.Enabled = true; txtMaLK.Focus();
-    }
-
-    private void FORM_QUANLYLINHKIENDIENTU_Load(object sender, EventArgs e)
-    {
-        LoadData(); LoadCombo(); LamLai();
-        this.WindowState = FormWindowState.Maximized;
-    }
-
-    private void btnThem_Click(object sender, EventArgs e)
-    {
-        string sql = "INSERT INTO LinhKien VALUES(@Ma,@Ten,@ThongSo,@Gia,@MaNCC)";
-        SqlCommand cmd = new SqlCommand(sql, conn);
-        cmd.Parameters.AddWithValue("@Ma", txtMaLK.Text);
-        cmd.Parameters.AddWithValue("@Ten", txtTenLK.Text);
-        cmd.Parameters.AddWithValue("@ThongSo", txtThongSo.Text);
-        cmd.Parameters.AddWithValue("@Gia", txtDonGia.Text);
-        cmd.Parameters.AddWithValue("@MaNCC", cboNCC.SelectedValue);
-        conn.Open(); cmd.ExecuteNonQuery(); conn.Close();
-        LoadData(); LamLai();
-    }
-
-    private void btnSua_Click(object sender, EventArgs e)
-    {
-        string sql = "UPDATE LinhKien SET TenLK=@Ten, ThongSoKyThuat=@ThongSo, DonGia=@Gia, MaNCC=@MaNCC WHERE MaLK=@Ma";
-        SqlCommand cmd = new SqlCommand(sql, conn);
-        cmd.Parameters.AddWithValue("@Ma", txtMaLK.Text);
-        cmd.Parameters.AddWithValue("@Ten", txtTenLK.Text);
-        cmd.Parameters.AddWithValue("@ThongSo", txtThongSo.Text);
-        cmd.Parameters.AddWithValue("@Gia", txtDonGia.Text);
-        cmd.Parameters.AddWithValue("@MaNCC", cboNCC.SelectedValue);
-        conn.Open(); cmd.ExecuteNonQuery(); conn.Close();
-        LoadData(); LamLai();
-    }
-
-    private void btnXoa_Click(object sender, EventArgs e)
-    {
-        string sql = "DELETE FROM LinhKien WHERE MaLK=@Ma";
-        SqlCommand cmd = new SqlCommand(sql, conn);
-        cmd.Parameters.AddWithValue("@Ma", txtMaLK.Text);
-        conn.Open(); cmd.ExecuteNonQuery(); conn.Close();
-        LoadData(); LamLai();
-    }
-
-    private void btnLamLai_Click(object sender, EventArgs e) { LamLai(); }
-    private void btnThoat_Click(object sender, EventArgs e) { Application.Exit(); }
-
-    private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
-    {
-        int i = e.RowIndex;
-        if (i >= 0)
-        {
-            txtMaLK.Text = dataGridView1.Rows[i].Cells["MaLK"].Value.ToString();
-            txtTenLK.Text = dataGridView1.Rows[i].Cells["TenLK"].Value.ToString();
-            txtThongSo.Text = dataGridView1.Rows[i].Cells["ThongSoKyThuat"].Value.ToString();
-            txtDonGia.Text = dataGridView1.Rows[i].Cells["DonGia"].Value.ToString();
-            cboNCC.SelectedValue = dataGridView1.Rows[i].Cells["MaNCC"].Value.ToString();
-            txtMaLK.Enabled = false; btnThem.Enabled = false;
-        }
-    }
-}
--------------------------------
-  using System;
-using System.Data;
-using System.Data.SqlClient;
-using System.Windows.Forms;
-
-namespace QuanLySinhVienApp
-{
-    public partial class Form1 : Form
-    {
-        string connectionString = @"Server=.;Database=QuanLySinhVien;Integrated Security=True";
-
-        public Form1()
-        {
-            InitializeComponent();
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            LoadData();
-        }
-
-        private void LoadData()
-        {
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                string query = "SELECT * FROM SinhVien";
-                SqlDataAdapter da = new SqlDataAdapter(query, conn);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-                dgvSinhVien.DataSource = dt;
-
-                dgvSinhVien.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                if (dgvSinhVien.Columns.Count >= 3)
-                {
-                    dgvSinhVien.Columns["MaSV"].HeaderText = "Mã SV";
-                    dgvSinhVien.Columns["HoTen"].HeaderText = "Họ tên";
-                    dgvSinhVien.Columns["DiemTB"].HeaderText = "Điểm TB";
-                }
-            }
-        }
-
-        private bool KiemTraNhap()
-        {
-            if (txtMaSV.Text.Trim() == "" || txtHoTen.Text.Trim() == "" || txtDiemTB.Text.Trim() == "")
-            {
-                MessageBox.Show("Vui lòng nhập đầy đủ thông tin.");
-                return false;
-            }
-
-            if (!double.TryParse(txtDiemTB.Text, out double diem))
-            {
-                MessageBox.Show("Điểm trung bình phải là số.");
-                return false;
-            }
-
-            if (diem < 0 || diem > 10)
-            {
-                MessageBox.Show("Điểm trung bình phải từ 0 đến 10.");
-                return false;
-            }
-
-            return true;
-        }
-
-        private bool MaSVTonTai(string maSV)
-        {
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                string query = "SELECT COUNT(*) FROM SinhVien WHERE MaSV=@MaSV";
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@MaSV", maSV);
-                conn.Open();
-                int count = (int)cmd.ExecuteScalar();
-                return count > 0;
-            }
-        }
-
-        private void btnThem_Click(object sender, EventArgs e)
-        {
-            if (!KiemTraNhap()) return;
-            if (MaSVTonTai(txtMaSV.Text.Trim()))
-            {
-                MessageBox.Show("Mã sinh viên đã tồn tại.");
-                return;
-            }
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                string query = "INSERT INTO SinhVien(MaSV, HoTen, DiemTB) VALUES(@MaSV, @HoTen, @DiemTB)";
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@MaSV", txtMaSV.Text.Trim());
-                cmd.Parameters.AddWithValue("@HoTen", txtHoTen.Text.Trim());
-                cmd.Parameters.AddWithValue("@DiemTB", double.Parse(txtDiemTB.Text));
-
-                conn.Open();
-                cmd.ExecuteNonQuery();
-                MessageBox.Show("Thêm thành công.");
-                LoadData();
-                XoaTrang();
-            }
-        }
-
-        private void btnSua_Click(object sender, EventArgs e)
-        {
-            if (!KiemTraNhap()) return;
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                string query = "UPDATE SinhVien SET HoTen=@HoTen, DiemTB=@DiemTB WHERE MaSV=@MaSV";
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@MaSV", txtMaSV.Text.Trim());
-                cmd.Parameters.AddWithValue("@HoTen", txtHoTen.Text.Trim());
-                cmd.Parameters.AddWithValue("@DiemTB", double.Parse(txtDiemTB.Text));
-
-                conn.Open();
-                int kq = cmd.ExecuteNonQuery();
-                if (kq > 0)
-                {
-                    MessageBox.Show("Sửa thành công.");
-                    LoadData();
-                    XoaTrang();
-                }
-                else
-                {
-                    MessageBox.Show("Không tìm thấy mã sinh viên để sửa.");
-                }
-            }
-        }
-
-        private void btnXoa_Click(object sender, EventArgs e)
-        {
-            if (txtMaSV.Text.Trim() == "")
-            {
-                MessageBox.Show("Chọn sinh viên cần xóa.");
-                return;
-            }
-
-            DialogResult r = MessageBox.Show("Bạn có chắc muốn xóa?", "Thông báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (r == DialogResult.No) return;
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                string query = "DELETE FROM SinhVien WHERE MaSV=@MaSV";
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@MaSV", txtMaSV.Text.Trim());
-
-                conn.Open();
-                int kq = cmd.ExecuteNonQuery();
-                if (kq > 0)
-                {
-                    MessageBox.Show("Xóa thành công.");
-                    LoadData();
-                    XoaTrang();
-                }
-                else
-                {
-                    MessageBox.Show("Không tìm thấy mã sinh viên để xóa.");
-                }
-            }
-        }
-
-        private void btnTim_Click(object sender, EventArgs e)
-        {
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                string query = "SELECT * FROM SinhVien WHERE MaSV LIKE @tk OR HoTen LIKE @tk";
-                SqlDataAdapter da = new SqlDataAdapter(query, conn);
-                da.SelectCommand.Parameters.AddWithValue("@tk", "%" + txtTim.Text.Trim() + "%");
-
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-                dgvSinhVien.DataSource = dt;
-            }
-        }
-
-        private void btnHienThi_Click(object sender, EventArgs e)
-        {
-            LoadData();
-        }
-
-        private void btnLamMoi_Click(object sender, EventArgs e)
-        {
-            XoaTrang();
-            LoadData();
-        }
-
-        private void btnThoat_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
-        private void XoaTrang()
-        {
-            txtMaSV.Clear();
-            txtHoTen.Clear();
-            txtDiemTB.Clear();
-            txtTim.Clear();
-            txtMaSV.Focus();
-        }
-
-        private void dgvSinhVien_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0)
-            {
-                txtMaSV.Text = dgvSinhVien.Rows[e.RowIndex].Cells["MaSV"].Value.ToString();
-                txtHoTen.Text = dgvSinhVien.Rows[e.RowIndex].Cells["HoTen"].Value.ToString();
-                txtDiemTB.Text = dgvSinhVien.Rows[e.RowIndex].Cells["DiemTB"].Value.ToString();
-            }
-        }
-    }
-}
-  
-</pre>
-
+    render();
+  </script>
 </body>
 </html>
