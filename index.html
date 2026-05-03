@@ -1,254 +1,947 @@
 <!doctype html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Lịch học tháng - Học kỳ 2, 2025-2026</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cuốn lịch học tập</title>
   <style>
     :root {
-      --bg: #f6f8fc;
-      --card: #ffffff;
-      --line: #d9e1ef;
-      --text: #172033;
-      --muted: #667085;
-      --blue: #2445b8;
+      --bg: #e9edf5;
+      --cover: #123c69;
+      --cover-dark: #0b2a4a;
+      --paper: #fffdf7;
+      --paper-2: #fff8e8;
+      --ink: #1f2937;
+      --muted: #7c7164;
+      --line: #eadfc9;
+      --blue: #2563eb;
       --orange: #f97316;
       --red: #dc2626;
-      --green: #15803d;
+      --green: #16a34a;
+      --shadow: 0 28px 60px rgba(22, 32, 52, .18);
     }
+
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,.75), transparent 28%),
+        linear-gradient(135deg, #dde7f4, var(--bg));
+      color: var(--ink);
+      padding: 28px 14px;
     }
-    .wrap {
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 24px;
+
+    .book {
+      width: min(1320px, 100%);
+      margin: auto;
+      display: grid;
+      grid-template-columns: 58px 1fr;
+      filter: drop-shadow(var(--shadow));
     }
-    .top {
+
+    .rings {
+      background: linear-gradient(180deg, var(--cover), var(--cover-dark));
+      border-radius: 24px 0 0 24px;
+      padding: 72px 0;
       display: flex;
-      gap: 14px;
+      flex-direction: column;
       align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      margin-bottom: 18px;
+      gap: 42px;
     }
+
+    .ring {
+      width: 34px;
+      height: 34px;
+      border: 7px solid #d8b55f;
+      border-radius: 50%;
+      background: #eef2f7;
+      box-shadow: inset 0 0 0 4px rgba(255,255,255,.5);
+    }
+
+    .planner {
+      background: var(--paper);
+      border-radius: 0 24px 24px 0;
+      overflow: hidden;
+      border: 1px solid #f1e4ca;
+      position: relative;
+    }
+
+    .planner::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 18px;
+      background: linear-gradient(90deg, rgba(0,0,0,.08), transparent);
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .cover {
+      background: linear-gradient(135deg, #123c69, #1d4ed8);
+      color: white;
+      padding: 26px 32px 24px 42px;
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 20px;
+    }
+
+    .cover small {
+      display: inline-block;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      font-weight: 700;
+      opacity: .78;
+      margin-bottom: 8px;
+    }
+
     h1 {
       margin: 0;
-      font-size: clamp(22px, 4vw, 34px);
-      color: var(--blue);
+      font-size: clamp(30px, 5vw, 48px);
+      line-height: 1;
     }
-    .controls {
+
+    .semester {
+      margin-top: 10px;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      opacity: .88;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    button, .file-label {
+      border: 0;
+      border-radius: 999px;
+      padding: 11px 16px;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      font-weight: 800;
+      cursor: pointer;
+      color: #123c69;
+      background: #fff6df;
+      font-size: 14px;
+    }
+
+    button.secondary, .file-label.secondary {
+      background: rgba(255,255,255,.18);
+      color: white;
+      border: 1px solid rgba(255,255,255,.35);
+    }
+
+    input[type="file"] { display: none; }
+
+    .page {
+      padding: 28px 28px 32px 42px;
+      background:
+        linear-gradient(var(--paper) 31px, #f2ead8 32px),
+        var(--paper);
+      background-size: 100% 32px;
+    }
+
+    .month-toolbar {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 18px;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .nav-buttons {
       display: flex;
       gap: 8px;
-      align-items: center;
-      flex-wrap: wrap;
     }
-    button, select {
-      border: 1px solid var(--line);
-      background: var(--card);
-      color: var(--text);
-      border-radius: 12px;
-      padding: 10px 12px;
-      font-weight: 650;
-      cursor: pointer;
-    }
-    button:hover, select:hover { border-color: var(--blue); }
-    .calendar {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
-    }
-    .month-title {
-      padding: 18px;
-      background: var(--blue);
+
+    .nav-buttons button {
+      background: #123c69;
       color: white;
-      font-size: 22px;
-      font-weight: 800;
+      min-width: 44px;
+    }
+
+    .month-title {
       text-align: center;
     }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
+
+    .month-title h2 {
+      margin: 0;
+      font-size: clamp(26px, 4vw, 38px);
+      color: #7c4a03;
+      letter-spacing: -1px;
     }
-    .dow {
-      padding: 12px 8px;
-      text-align: center;
-      font-weight: 800;
-      background: #eef2ff;
-      border-bottom: 1px solid var(--line);
-      color: var(--blue);
-    }
-    .day {
-      min-height: 142px;
-      border-right: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
-      padding: 8px;
-      background: #fff;
-    }
-    .day:nth-child(7n) { border-right: 0; }
-    .date {
-      font-weight: 800;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
-    .other { background: #f8fafc; }
-    .other .date { opacity: .35; }
-    .event {
-      margin: 6px 0;
-      padding: 7px 8px;
-      border-radius: 10px;
-      font-size: 12px;
-      line-height: 1.35;
-      border-left: 4px solid var(--blue);
-      background: #eef2ff;
-    }
-    .event .time { font-weight: 800; }
-    .event .name { font-weight: 750; }
-    .net { border-left-color: var(--blue); background: #eef2ff; }
-    .tm { border-left-color: var(--orange); background: #fff7ed; }
-    .qp { border-left-color: var(--green); background: #ecfdf5; }
-    .exam { border-left-color: var(--red); background: #fef2f2; }
-    .legend {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 14px;
+
+    .month-title p {
+      margin: 6px 0 0;
       color: var(--muted);
       font-size: 14px;
     }
-    .dot { width: 10px; height: 10px; border-radius: 999px; display: inline-block; margin-right: 6px; }
+
+    .tools {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .tools button, .tools .file-label {
+      background: #fff;
+      border: 1px solid var(--line);
+      color: #7c4a03;
+    }
+
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .legend span {
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.85);
+      border: 1px solid var(--line);
+    }
+
+    .legend i {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 6px;
+    }
+
     .blue { background: var(--blue); }
     .orange { background: var(--orange); }
-    .green { background: var(--green); }
     .red { background: var(--red); }
+    .green { background: var(--green); }
+
+    .weekdays, .month-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+    }
+
+    .weekday {
+      text-align: center;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 13px;
+      font-weight: 900;
+      color: #7c4a03;
+      background: var(--paper-2);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 10px 6px;
+    }
+
+    .day {
+      min-height: 245px;
+      background: rgba(255,255,255,.8);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 10px 24px rgba(89, 70, 38, .07);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .day.outside {
+      opacity: .45;
+      background: rgba(255,255,255,.42);
+    }
+
+    .day.today {
+      outline: 3px solid rgba(37, 99, 235, .28);
+    }
+
+    .day-head {
+      padding: 10px 12px;
+      background: var(--paper-2);
+      border-bottom: 1px dashed #decda9;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .date-number {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #fff;
+      border: 1px solid var(--line);
+      color: #7c4a03;
+      font-weight: 900;
+      font-size: 16px;
+    }
+
+    .today .date-number {
+      background: var(--blue);
+      color: white;
+      border-color: var(--blue);
+    }
+
+    .date-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .day-body {
+      padding: 9px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .event {
+      border-radius: 12px;
+      padding: 8px;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 11px;
+      line-height: 1.35;
+      background: #eef4ff;
+      border: 1px solid #c7d7fe;
+      border-left: 4px solid var(--blue);
+    }
+
+    .event.practice {
+      background: #fff4e8;
+      border-color: #fed7aa;
+      border-left-color: var(--orange);
+    }
+
+    .event.exam {
+      background: #fff1f2;
+      border-color: #fecaca;
+      border-left-color: var(--red);
+    }
+
+    .event.todo {
+      background: #ecfdf5;
+      border-color: #bbf7d0;
+      border-left-color: var(--green);
+    }
+
+    .time {
+      font-weight: 900;
+      color: var(--blue);
+      margin-bottom: 3px;
+    }
+
+    .practice .time { color: #c2410c; }
+    .exam .time { color: #b91c1c; }
+    .todo .time { color: #15803d; }
+
+    .subject {
+      font-weight: 900;
+      margin-bottom: 3px;
+    }
+
+    .meta {
+      color: #475569;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 76px;
+      margin-top: auto;
+      border: 0;
+      border-radius: 12px;
+      padding: 9px;
+      resize: vertical;
+      outline: none;
+      font: 13px/1.6 "Times New Roman", Times, serif;
+      color: #334155;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          #fffdf7 0,
+          #fffdf7 25px,
+          #eadfc9 26px
+        );
+    }
+
+    textarea:focus {
+      box-shadow: inset 0 0 0 2px rgba(37,99,235,.25);
+      background-color: white;
+    }
+
+    .bottom-page {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .memo,
+    .todos {
+      background: rgba(255,255,255,.78);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: 0 10px 26px rgba(89, 70, 38, .08);
+    }
+
+    .memo h3,
+    .todos h3 {
+      margin: 0 0 10px;
+      color: #7c4a03;
+    }
+
+    .memo textarea {
+      min-height: 120px;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .todo-row {
+      display: grid;
+      grid-template-columns: 1fr 145px auto;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .todo-row input {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 11px;
+      outline: none;
+      background: #fffdf7;
+    }
+
+    .todo-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 8px;
+    }
+
+    .todo-list li {
+      display: grid;
+      grid-template-columns: 24px 1fr auto 28px;
+      gap: 8px;
+      align-items: center;
+      background: #fffdf7;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 9px;
+      font-size: 13px;
+    }
+
+    .todo-list li.done label {
+      text-decoration: line-through;
+      color: #9ca3af;
+    }
+
+    .todo-date {
+      color: #7c7164;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .delete {
+      background: transparent;
+      color: var(--red);
+      padding: 4px;
+    }
+
+    .sync-note {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 1100px) {
+      .weekdays, .month-grid { grid-template-columns: repeat(2, 1fr); }
+      .weekday { display: none; }
+      .month-toolbar { grid-template-columns: 1fr; }
+      .month-title { text-align: left; }
+      .tools { justify-content: flex-start; }
+    }
+
     @media (max-width: 760px) {
-      .wrap { padding: 12px; }
-      .grid { display: block; }
-      .dow { display: none; }
-      .day { min-height: auto; border-right: 0; }
-      .other { display: none; }
-      .date::before { content: attr(data-dow) " - "; color: var(--blue); }
+      body { padding: 12px; }
+      .book { grid-template-columns: 1fr; }
+      .rings { display: none; }
+      .planner { border-radius: 20px; }
+      .cover { flex-direction: column; align-items: flex-start; }
+      .page { padding: 22px 14px; }
+      .weekdays, .month-grid { grid-template-columns: 1fr; }
+      .bottom-page { grid-template-columns: 1fr; }
+      .todo-row { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      body { background: white; padding: 0; }
+      .book { width: 100%; filter: none; grid-template-columns: 1fr; }
+      .rings, .actions, .tools, .nav-buttons, .bottom-page { display: none; }
+      .planner { border-radius: 0; border: 0; }
+      .cover { padding: 16px 24px; }
+      .page { padding: 18px; }
+      .weekdays, .month-grid { grid-template-columns: repeat(7, 1fr); gap: 6px; }
+      .weekday { display: block; padding: 6px; }
+      .day { min-height: 160px; break-inside: avoid; }
+      .event { font-size: 9px; padding: 5px; }
+      textarea { min-height: 46px; font-size: 10px; }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="top">
-      <h1>Lịch học theo tháng</h1>
-      <div class="controls">
-        <button id="prev">‹ Tháng trước</button>
-        <select id="month"></select>
-        <button id="next">Tháng sau ›</button>
-      </div>
-    </div>
-
-    <div class="calendar">
-      <div class="month-title" id="title"></div>
-      <div class="grid" id="calendar"></div>
-    </div>
-
-    <div class="legend">
-      <span><i class="dot blue"></i>Lập trình .NET</span>
-      <span><i class="dot orange"></i>Thương mại điện tử</span>
-      <span><i class="dot green"></i>QP2104</span>
-      <span><i class="dot red"></i>Kiểm tra</span>
+  <div id="loginScreen" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;">
+    <div style="width:min(420px,100%);background:white;border-radius:24px;padding:28px;box-shadow:0 24px 60px rgba(15,23,42,.18);text-align:center;">
+      <h2 style="margin:0 0 8px;color:#123c69;">Đăng nhập lịch học</h2>
+      <p style="margin:0 0 18px;color:#64748b;">Nhập mật khẩu để xem cuốn lịch</p>
+      <input id="passwordInput" type="password" placeholder="Mật khẩu" style="width:100%;padding:13px 14px;border:1px solid #dbe3ef;border-radius:14px;outline:none;font-size:16px;margin-bottom:12px;">
+      <button onclick="login()" style="width:100%;background:#123c69;color:white;border-radius:14px;">Vào lịch</button>
+      <div id="loginError" style="display:none;margin-top:12px;color:#dc2626;font-weight:700;">Sai mật khẩu</div>
     </div>
   </div>
 
+  <main class="book" id="app" style="display:none;">
+    <aside class="rings">
+      <span class="ring"></span>
+      <span class="ring"></span>
+      <span class="ring"></span>
+      <span class="ring"></span>
+      <span class="ring"></span>
+      <span class="ring"></span>
+    </aside>
+
+    <section class="planner">
+      <header class="cover">
+        <div>
+          <small>Monthly Study Planner</small>
+          <h1>Cuốn lịch học tập</h1>
+          <div class="semester">Lịch tháng • Ghi chú tự lưu • Chọn tháng linh hoạt</div>
+        </div>
+        <div class="actions">
+          <button onclick="goToday()">Hôm nay</button>
+          <button onclick="window.print()">In / lưu PDF</button>
+          <button class="secondary" onclick="clearAllData()">Xóa dữ liệu</button>
+        </div>
+      </header>
+
+      <section class="page">
+        <div class="month-toolbar">
+          <div class="nav-buttons">
+            <button onclick="changeMonth(-1)">‹</button>
+            <button onclick="changeMonth(1)">›</button>
+          </div>
+
+          <div class="month-title">
+            <h2 id="monthTitle">Tháng</h2>
+            <p id="monthRange">Tự cập nhật ngày theo tháng hiện tại</p>
+          </div>
+
+          <div class="tools">
+            <button onclick="exportData()">Xuất dữ liệu</button>
+            <label class="file-label" for="importFile">Nhập dữ liệu</label>
+            <input id="importFile" type="file" accept="application/json" onchange="importData(event)">
+          </div>
+        </div>
+
+        <div class="legend">
+          <span><i class="blue"></i>Lý thuyết</span>
+          <span><i class="orange"></i>Thực hành</span>
+          <span><i class="red"></i>Kiểm tra</span>
+          <span><i class="green"></i>Việc cần làm</span>
+        </div>
+
+        <div class="weekdays">
+          <div class="weekday">Thứ Hai</div>
+          <div class="weekday">Thứ Ba</div>
+          <div class="weekday">Thứ Tư</div>
+          <div class="weekday">Thứ Năm</div>
+          <div class="weekday">Thứ Sáu</div>
+          <div class="weekday">Thứ Bảy</div>
+          <div class="weekday">Chủ Nhật</div>
+        </div>
+
+        <div class="month-grid" id="monthGrid"></div>
+
+        <div class="bottom-page">
+          <section class="memo">
+            <h3>Ghi chú chung của tháng</h3>
+            <textarea id="monthMemo" placeholder="Deadline, bài tập, nội dung cần ôn trong tháng..."></textarea>
+          </section>
+
+          <section class="todos">
+            <h3>Việc cần làm</h3>
+            <div class="todo-row">
+              <input id="todoInput" placeholder="Thêm việc cần làm..." />
+              <input id="todoDate" type="date" />
+              <button onclick="addTodo()">+</button>
+            </div>
+            <ul class="todo-list" id="todoList"></ul>
+            <p class="sync-note">Muốn không mất dữ liệu khi đổi máy: bấm “Xuất dữ liệu”, gửi file JSON sang máy khác rồi bấm “Nhập dữ liệu”. Web tĩnh không thể tự sync cloud nếu chưa có backend.</p>
+          </section>
+        </div>
+      </section>
+    </section>
+  </main>
+
   <script>
-    const events = [
-      // Lập trình .NET
-      ...['2026-01-26','2026-02-02','2026-02-09','2026-02-16','2026-03-02','2026-03-09','2026-03-16','2026-03-23','2026-03-30','2026-04-06'].map(date => ({ date, time:'07:00–08:20', name:'Lập trình .NET', room:'C0902', cls:'net' })),
-      ...['2026-01-28','2026-02-04','2026-03-04','2026-03-11','2026-03-18','2026-03-25','2026-04-01'].map(date => ({ date, time:'07:00–08:20', name:'Lập trình .NET', room:'C0902', cls:'net' })),
-      ...['2026-03-10','2026-03-17','2026-03-24','2026-03-31','2026-04-07'].map(date => ({ date, time:'12:30–17:30', name:'Lập trình .NET', room:'A0206 - Máy tính 6', cls:'net' })),
-      ...['2026-03-12','2026-03-19','2026-03-26','2026-04-02','2026-04-09'].map(date => ({ date, time:'12:30–17:30', name:'Lập trình .NET', room:'A0206 - Máy tính 6', cls:'net' })),
-      { date:'2026-04-24', time:'08:30', name:'KIỂM TRA KTHP - Lập trình .NET', room:'A0204 - Máy tính 3', cls:'exam' },
+    const APP_PASSWORD = "123456"; // đổi mật khẩu ở đây
 
-      // Thương mại điện tử
-      ...['2026-05-05','2026-05-12','2026-05-19','2026-05-26','2026-06-02','2026-06-09','2026-06-16','2026-06-23'].map(date => ({ date, time:'09:30–10:50', name:'Thương mại điện tử', room:'B0210', cls:'tm' })),
-      ...['2026-05-07','2026-05-14','2026-05-21','2026-05-28','2026-06-04','2026-06-11','2026-06-18'].map(date => ({ date, time:'09:30–10:50', name:'Thương mại điện tử', room:'B0210', cls:'tm' })),
-      ...['2026-05-27','2026-06-03','2026-06-10','2026-06-17','2026-06-24'].map(date => ({ date, time:'12:30–17:30', name:'Thương mại điện tử', room:'A0204 - Máy tính 3', cls:'tm' })),
+    function login() {
+      const passwordInput = document.getElementById("passwordInput");
+      const loginError = document.getElementById("loginError");
+      const loginScreen = document.getElementById("loginScreen");
+      const app = document.getElementById("app");
 
-      // Quốc phòng
-      ...['2026-05-08','2026-05-15','2026-05-22','2026-05-29','2026-06-05','2026-06-12','2026-06-19'].map(date => ({ date, time:'06:30–11:30', name:'QP2104 - Kỹ thuật chiến đấu bộ binh và chiến thuật', room:'VLU_Nhà thi đấu 1', cls:'qp' })),
-      ...['2026-05-09','2026-05-16','2026-05-23'].map(date => ({ date, time:'06:30–11:30', name:'QP2104 - Kỹ thuật chiến đấu bộ binh và chiến thuật', room:'VLU_Nhà thi đấu 1', cls:'qp' }))
-    ];
-
-    const months = [
-      { y: 2026, m: 0, label: 'Tháng 1/2026' },
-      { y: 2026, m: 1, label: 'Tháng 2/2026' },
-      { y: 2026, m: 2, label: 'Tháng 3/2026' },
-      { y: 2026, m: 3, label: 'Tháng 4/2026' },
-      { y: 2026, m: 4, label: 'Tháng 5/2026' },
-      { y: 2026, m: 5, label: 'Tháng 6/2026' }
-    ];
-    const dows = ['Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy','Chủ Nhật'];
-    let current = 2;
-
-    const monthSelect = document.getElementById('month');
-    months.forEach((x, i) => {
-      const opt = document.createElement('option');
-      opt.value = i;
-      opt.textContent = x.label;
-      monthSelect.appendChild(opt);
-    });
-    monthSelect.addEventListener('change', e => { current = Number(e.target.value); render(); });
-    document.getElementById('prev').onclick = () => { current = Math.max(0, current - 1); render(); };
-    document.getElementById('next').onclick = () => { current = Math.min(months.length - 1, current + 1); render(); };
-
-    function isoDate(y, m, d) {
-      return `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-    }
-    function mondayIndex(date) {
-      return (date.getDay() + 6) % 7;
-    }
-    function render() {
-      const { y, m, label } = months[current];
-      document.getElementById('title').textContent = label;
-      monthSelect.value = current;
-      const cal = document.getElementById('calendar');
-      cal.innerHTML = '';
-      dows.forEach(d => {
-        const el = document.createElement('div');
-        el.className = 'dow';
-        el.textContent = d;
-        cal.appendChild(el);
-      });
-      const first = new Date(y, m, 1);
-      const daysInMonth = new Date(y, m + 1, 0).getDate();
-      const startBlank = mondayIndex(first);
-      const totalCells = Math.ceil((startBlank + daysInMonth) / 7) * 7;
-      for (let i = 0; i < totalCells; i++) {
-        const dayNum = i - startBlank + 1;
-        const cell = document.createElement('div');
-        cell.className = 'day';
-        if (dayNum < 1 || dayNum > daysInMonth) {
-          cell.classList.add('other');
-          cal.appendChild(cell);
-          continue;
-        }
-        const dateStr = isoDate(y, m, dayNum);
-        const date = document.createElement('div');
-        date.className = 'date';
-        date.dataset.dow = dows[i % 7];
-        date.textContent = dayNum;
-        cell.appendChild(date);
-        events.filter(e => e.date === dateStr).forEach(e => {
-          const item = document.createElement('div');
-          item.className = `event ${e.cls}`;
-          item.innerHTML = `<div class="time">${e.time}</div><div class="name">${e.name}</div><div>${e.room}</div>`;
-          cell.appendChild(item);
-        });
-        cal.appendChild(cell);
+      if (passwordInput.value === APP_PASSWORD) {
+        sessionStorage.setItem("calendar-book-login", "true");
+        loginScreen.style.display = "none";
+        app.style.display = "grid";
+      } else {
+        loginError.style.display = "block";
       }
     }
-    render();
+
+    const monthGrid = document.getElementById("monthGrid");
+    const monthTitle = document.getElementById("monthTitle");
+    const monthRange = document.getElementById("monthRange");
+    const monthMemo = document.getElementById("monthMemo");
+    const todoInput = document.getElementById("todoInput");
+    const todoDate = document.getElementById("todoDate");
+    const todoList = document.getElementById("todoList");
+
+    const today = new Date();
+    let viewYear = today.getFullYear();
+    let viewMonth = today.getMonth();
+
+    const weekdayNames = ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
+
+    const scheduleEvents = {
+      // TH1606 - Thương mại điện tử, lý thuyết
+      "2026-05-05": [{ type: "theory", time: "09:30 - 10:50", subject: "TH1606 - Thương mại điện tử", meta: "B0210 • Trần Hổ Đạt" }],
+      "2026-05-12": [{ type: "theory", time: "09:30 - 10:50", subject: "TH1606 - Thương mại điện tử", meta: "B0210 • Trần Hổ Đạt" }],
+      "2026-05-19": [{ type: "theory", time: "09:30 - 10:50", subject: "TH1606 - Thương mại điện tử", meta: "B0210 • Trần Hổ Đạt" }],
+      "2026-05-26": [{ type: "theory", time: "09:30 - 10:50", subject: "TH1606 - Thương mại điện tử", meta: "B0210 • Trần Hổ Đạt" }],
+      "2026-06-02": [{ type: "theory", time: "09:30 - 10:50", subject: "TH1606 - Thương mại điện tử", meta: "B0210 • Trần Hổ Đạt" }],
+      "2026-06-09": [{ type: "theory", time: "09:30 - 10:50", subject: "TH1606 - Thương mại điện tử", meta: "B0210 • Trần Hổ Đạt" }],
+      "2026-06-16": [{ type: "theory", time: "09:30 - 10:50", subject: "TH1606 - Thương mại điện tử", meta: "B0210 • Trần Hổ Đạt" }],
+      "2026-06-23": [{ type: "theory", time: "09:30 - 10:50", subject: "TH1606 - Thương mại điện tử", meta: "B0210 • Trần Hổ Đạt" }],
+
+      "2026-05-07": [{ type: "theory", time: "09:30 - 10:50", subject: "TH1606 - Thương mại điện tử", meta: "B0210 • Trần Hổ Đạt" }],
+      "2026-05-14": [{ type: "theory", time: "09:30 - 10:50", subject: "TH1606 - Thương mại điện tử", meta: "B0210 • Trần Hổ Đạt" }],
+      "2026-05-21": [{ type: "theory", time: "09:30 - 10:50", subject: "TH1606 - Thương mại điện tử", meta: "B0210 • Trần Hổ Đạt" }],
+      "2026-05-28": [{ type: "theory", time: "09:30 - 10:50", subject: "TH1606 - Thương mại điện tử", meta: "B0210 • Trần Hổ Đạt" }],
+      "2026-06-04": [{ type: "theory", time: "09:30 - 10:50", subject: "TH1606 - Thương mại điện tử", meta: "B0210 • Trần Hổ Đạt" }],
+      "2026-06-11": [{ type: "theory", time: "09:30 - 10:50", subject: "TH1606 - Thương mại điện tử", meta: "B0210 • Trần Hổ Đạt" }],
+      "2026-06-18": [{ type: "theory", time: "09:30 - 10:50", subject: "TH1606 - Thương mại điện tử", meta: "B0210 • Trần Hổ Đạt" }],
+
+      // TH1606 - Thương mại điện tử, thực hành
+      "2026-05-27": [{ type: "practice", time: "12:30 - 17:30", subject: "TH1606 - Thương mại điện tử", meta: "A0204 - Máy tính 3 • Trần Thị Kim Ngân" }],
+      "2026-06-03": [{ type: "practice", time: "12:30 - 17:30", subject: "TH1606 - Thương mại điện tử", meta: "A0204 - Máy tính 3 • Trần Thị Kim Ngân" }],
+      "2026-06-10": [{ type: "practice", time: "12:30 - 17:30", subject: "TH1606 - Thương mại điện tử", meta: "A0204 - Máy tính 3 • Trần Thị Kim Ngân" }],
+      "2026-06-17": [{ type: "practice", time: "12:30 - 17:30", subject: "TH1606 - Thương mại điện tử", meta: "A0204 - Máy tính 3 • Trần Thị Kim Ngân" }],
+      "2026-06-24": [{ type: "practice", time: "12:30 - 17:30", subject: "TH1606 - Thương mại điện tử", meta: "A0204 - Máy tính 3 • Trần Thị Kim Ngân" }],
+
+      // QP2104 - Kỹ thuật chiến đấu bộ binh và chiến thuật
+      "2026-05-08": [{ type: "practice", time: "06:30 - 11:30", subject: "QP2104 - Kỹ thuật chiến đấu bộ binh và chiến thuật", meta: "VLU_Nhà thi đấu 1 • Võ Minh Trung" }],
+      "2026-05-15": [{ type: "practice", time: "06:30 - 11:30", subject: "QP2104 - Kỹ thuật chiến đấu bộ binh và chiến thuật", meta: "VLU_Nhà thi đấu 1 • Võ Minh Trung" }],
+      "2026-05-22": [{ type: "practice", time: "06:30 - 11:30", subject: "QP2104 - Kỹ thuật chiến đấu bộ binh và chiến thuật", meta: "VLU_Nhà thi đấu 1 • Võ Minh Trung" }],
+      "2026-05-29": [{ type: "practice", time: "06:30 - 11:30", subject: "QP2104 - Kỹ thuật chiến đấu bộ binh và chiến thuật", meta: "VLU_Nhà thi đấu 1 • Võ Minh Trung" }],
+      "2026-06-05": [{ type: "practice", time: "06:30 - 11:30", subject: "QP2104 - Kỹ thuật chiến đấu bộ binh và chiến thuật", meta: "VLU_Nhà thi đấu 1 • Võ Minh Trung" }],
+      "2026-06-12": [{ type: "practice", time: "06:30 - 11:30", subject: "QP2104 - Kỹ thuật chiến đấu bộ binh và chiến thuật", meta: "VLU_Nhà thi đấu 1 • Võ Minh Trung" }],
+      "2026-06-19": [{ type: "practice", time: "06:30 - 11:30", subject: "QP2104 - Kỹ thuật chiến đấu bộ binh và chiến thuật", meta: "VLU_Nhà thi đấu 1 • Võ Minh Trung" }],
+
+      "2026-05-09": [{ type: "practice", time: "06:30 - 11:30", subject: "QP2104 - Kỹ thuật chiến đấu bộ binh và chiến thuật", meta: "VLU_Nhà thi đấu 1 • Võ Minh Trung" }],
+      "2026-05-16": [{ type: "practice", time: "06:30 - 11:30", subject: "QP2104 - Kỹ thuật chiến đấu bộ binh và chiến thuật", meta: "VLU_Nhà thi đấu 1 • Võ Minh Trung" }],
+      "2026-05-23": [{ type: "practice", time: "06:30 - 11:30", subject: "QP2104 - Kỹ thuật chiến đấu bộ binh và chiến thuật", meta: "VLU_Nhà thi đấu 1 • Võ Minh Trung" }],
+
+      // Kiểm tra
+      "2026-04-24": [{ type: "exam", time: "08:30", subject: "Kiểm tra KTHP", meta: "A0204 - Máy tính 3" }]
+    };
+
+    function pad(value) {
+      return String(value).padStart(2, "0");
+    }
+
+    function dateKey(date) {
+      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+    }
+
+    function monthKey() {
+      return `${viewYear}-${pad(viewMonth + 1)}`;
+    }
+
+    function formatDate(date) {
+      return `${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()}`;
+    }
+
+    function getNotes() {
+      try {
+        return JSON.parse(localStorage.getItem("calendar-book-notes") || "{}");
+      } catch (error) {
+        localStorage.removeItem("calendar-book-notes");
+        return {};
+      }
+    }
+
+    function saveNotes(notes) {
+      localStorage.setItem("calendar-book-notes", JSON.stringify(notes));
+    }
+
+    function getTodos() {
+      try {
+        const todos = JSON.parse(localStorage.getItem("calendar-book-todos") || "[]");
+        return Array.isArray(todos) ? todos : [];
+      } catch (error) {
+        localStorage.removeItem("calendar-book-todos");
+        return [];
+      }
+    }
+
+    function saveTodos(todos) {
+      localStorage.setItem("calendar-book-todos", JSON.stringify(todos));
+    }
+
+    function getMonthMemos() {
+      try {
+        return JSON.parse(localStorage.getItem("calendar-book-month-memos") || "{}");
+      } catch (error) {
+        localStorage.removeItem("calendar-book-month-memos");
+        return {};
+      }
+    }
+
+    function saveMonthMemos(memos) {
+      localStorage.setItem("calendar-book-month-memos", JSON.stringify(memos));
+    }
+
+    function getEventsForDate(date) {
+      const key = dateKey(date);
+      const events = [];
+      if (scheduleEvents[key]) events.push(...scheduleEvents[key]);
+
+      getTodos()
+        .filter(todo => todo && todo.date === key && !todo.done)
+        .forEach(todo => events.push({ type: "todo", time: "Todo", subject: todo.text || "Việc cần làm", meta: "Việc cần làm" }));
+
+      return events;
+    }
+
+    function renderMonth() {
+      const monthNames = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"];
+      monthTitle.textContent = `${monthNames[viewMonth]} / ${viewYear}`;
+
+      const firstDay = new Date(viewYear, viewMonth, 1);
+      const lastDay = new Date(viewYear, viewMonth + 1, 0);
+      monthRange.textContent = `${formatDate(firstDay)} - ${formatDate(lastDay)}`;
+
+      const daysInMonth = lastDay.getDate();
+      const startWeekday = (firstDay.getDay() + 6) % 7;
+      const notes = getNotes();
+
+      monthGrid.innerHTML = "";
+
+      // thêm ô trống đầu tháng
+      for (let i = 0; i < startWeekday; i++) {
+        const empty = document.createElement("div");
+        empty.className = "day outside";
+        monthGrid.appendChild(empty);
+      }
+
+      // render đúng ngày trong tháng
+      for (let i = 1; i <= daysInMonth; i++) {
+        const date = new Date(viewYear, viewMonth, i);
+
+        const key = dateKey(date);
+        const isToday = key === dateKey(today);
+        const events = getEventsForDate(date);
+
+        const day = document.createElement("article");
+        day.className = `day${isToday ? " today" : ""}`;
+
+        day.innerHTML = `
+          <div class="day-head">
+            <div>
+              <div class="date-number">${date.getDate()}</div>
+            </div>
+            <div class="date-label">${weekdayNames[date.getDay()]}<br>${pad(date.getMonth() + 1)}/${date.getFullYear()}</div>
+          </div>
+          <div class="day-body">
+            ${events.map(event => `
+              <div class="event ${event.type}">
+                <div class="time">${event.time}</div>
+                <div class="subject">${event.subject}</div>
+                <div class="meta">${event.meta}</div>
+              </div>
+            `).join("")}
+            <textarea data-date="${key}" placeholder="Ghi chú ngày ${formatDate(date)}...">${notes[key] || ""}</textarea>
+          </div>
+        `;
+
+        monthGrid.appendChild(day);
+      }
+
+      document.querySelectorAll("textarea[data-date]").forEach(area => {
+        area.addEventListener("input", () => {
+          const currentNotes = getNotes();
+          currentNotes[area.dataset.date] = area.value;
+          saveNotes(currentNotes);
+        });
+      });
+
+      const memos = getMonthMemos();
+      monthMemo.value = memos[monthKey()] || "";
+      const defaultTodoDate = new Date(viewYear, viewMonth, Math.min(today.getDate(), lastDay.getDate()));
+      todoDate.value = dateKey(defaultTodoDate);
+      renderTodos();
+    }
+
+    monthMemo.addEventListener("input", () => {
+      const memos = getMonthMemos();
+      memos[monthKey()] = monthMemo.value;
+      saveMonthMemos(memos);
+    });
+
+    function changeMonth(step) {
+      viewMonth += step;
+      if (viewMonth < 0) {
+        viewMonth = 11;
+        viewYear--;
+      }
+      if (viewMonth > 11) {
+        viewMonth = 0;
+        viewYear++;
+      }
+      renderMonth();
+    }
+
+    function goToday() {
+      viewYear = today.getFullYear();
+      viewMonth = today.getMonth();
+      renderMonth();
+    }
+
+    function addTodo() {
+      const text = todoInput.value.trim();
+      const date = todoDate.value || dateKey(today);
+      if (!text) return;
+
+      const todos = getTodos();
+      todos.push({ text, date, done: false });
+      saveTodos(todos);
+      todoInput.value = "";
+      renderMonth();
+    }
+
+    function toggleTodo(index) {
+      const todos = getTodos();
+      todos[index].done = !todos[index].done;
+      saveTodos(todos);
+      renderMonth();
+    }
+
+    function removeTodo(index) {
+      const todos = getTodos();
+      todos.splice(index, 1);
+      saveTodos(todos);
+      renderMonth();
+    }
+
+    function renderTodos() {
+      const todos = getTodos();
+      todoList.innerHTML = "";
+      todos.forEach((todo, index) => {
+        if (!todo) return;
+        const li = document.createElement("li");
+        const safeText = todo.text || "Việc cần làm";
+        const safeDate = todo.date || dateKey(today);
+        const displayDate = safeDate.includes("-") ? safeDate.split("-").reverse().join("/") : safeDate;
+        if (todo.done) li.classList.add("done");
+        li.innerHTML = `
+          <input type="checkbox" ${todo.done ? "checked" : ""} onchange="toggleTodo(${index})">
+          <label>${safeText}</label>
+          <span class="todo-date">${displayDate}</span>
+          <button class="delete" onclick="removeTodo(${index})">×</button>
+        `;
+        todoList.appendChild(li);
+      });
+    }
+
+    function exportData() {
+      const data = {
+        notes: getNotes(),
+        todos: getTodos(),
+        monthMemos: getMonthMemos(),
+        exportedAt: new Date().toISOString()
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "du-lieu-cuon-lich-hoc-tap.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function importData(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const data = JSON.parse(reader.result);
+              if (data.notes && typeof data.notes === "object") localStorage.setItem("calendar-book-notes", JSON.stringify(data.notes));
+          if (Array.isArray(data.todos)) localStorage.setItem("calendar-book-todos", JSON.stringify(data.todos));
+          if (data.monthMemos && typeof data.monthMemos === "object") localStorage.setItem("calendar-book-month-memos", JSON.stringify(data.monthMemos));
+          renderMonth();
+          alert("Đã nhập dữ liệu thành công!");
+        } catch (error) {
+          alert("File không hợp lệ. Vui lòng chọn file JSON đã xuất từ lịch.");
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = "";
+    }
+
+    function clearAllData() {
+      if (!confirm("Xóa toàn bộ ghi chú, todo và ghi chú tháng?")) return;
+      localStorage.removeItem("calendar-book-notes");
+      localStorage.removeItem("calendar-book-todos");
+      localStorage.removeItem("calendar-book-month-memos");
+      renderMonth();
+    }
+
+    todoInput.addEventListener("keydown", e => {
+      if (e.key === "Enter") addTodo();
+    });
+
+    document.getElementById("passwordInput").addEventListener("keydown", e => {
+      if (e.key === "Enter") login();
+    });
+
+    if (sessionStorage.getItem("calendar-book-login") === "true") {
+      document.getElementById("loginScreen").style.display = "none";
+      document.getElementById("app").style.display = "grid";
+    }
+
+    renderMonth();
   </script>
 </body>
 </html>
