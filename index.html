@@ -484,9 +484,48 @@
         height: 55px;
       }
     }
+  /* --- Password Gate --- */
+    .gate {
+      position: fixed; inset: 0; z-index: 9999;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(3,4,20,0.92);
+      backdrop-filter: blur(8px);
+    }
+    .gate-card {
+      width: min(420px, 92vw);
+      padding: 22px 20px 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+      box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+      text-align: center;
+    }
+    .gate h3 { margin-bottom: 10px; }
+    .gate input {
+      width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(0,0,0,0.35); color: #fff; outline: none; margin-top: 10px;
+    }
+    .gate button {
+      margin-top: 12px; width: 100%; padding: 10px 12px; border-radius: 10px; border: 0;
+      background: linear-gradient(90deg, #00e5ff, #ff8fc7); color: #081022; font-weight: 700; cursor: pointer;
+    }
+    .gate .err { color: #ff9fc8; font-size: 13px; margin-top: 8px; display:none; }
+    .shake { animation: shake .3s linear 1; }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
   </style>
 </head>
 <body>
+  <!-- Password Gate -->
+  <div class="gate" id="gate">
+    <div class="gate-card" id="gateCard">
+      <h3>🔒 Nhập pass để vào</h3>
+      <p style="opacity:.8;font-size:14px">Gợi ý: số 1</p>
+      <input id="pwd" type="password" placeholder="Nhập pass..." />
+      <button id="btn">Vào</button>
+      <div class="err" id="err">Sai pass rồi 😅</div>
+    </div>
+  </div>
   <main class="page">
     <div class="aurora"></div>
     <div class="moon"></div>
@@ -533,6 +572,27 @@
       star.style.animationDelay = Math.random() * 2 + 's';
       page.appendChild(star);
     }
+  
+    // Gate logic
+    const gate = document.getElementById('gate');
+    const btn = document.getElementById('btn');
+    const pwd = document.getElementById('pwd');
+    const err = document.getElementById('err');
+    const card = document.getElementById('gateCard');
+
+    function tryLogin(){
+      if(pwd.value === '1'){
+        gate.style.display = 'none';
+        document.body.style.overflow = 'hidden';
+      } else {
+        err.style.display = 'block';
+        card.classList.remove('shake');
+        void card.offsetWidth; // reflow
+        card.classList.add('shake');
+      }
+    }
+    btn.addEventListener('click', tryLogin);
+    pwd.addEventListener('keydown', (e)=>{ if(e.key==='Enter') tryLogin(); });
   </script>
 </body>
 </html>
