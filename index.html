@@ -146,6 +146,46 @@
       z-index: 1;
     }
 
+    /* --- Many vector car icons (flying, no images) --- */
+    .car-icon {
+      position: absolute;
+      left: -160px;
+      width: 110px;
+      height: 52px;
+      z-index: 7;
+      animation-name: flyCar;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      filter: drop-shadow(0 0 12px rgba(0,229,255,0.35)) drop-shadow(0 8px 10px rgba(0,0,0,0.55));
+    }
+
+    .car-icon svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .car-icon .body { fill: var(--car-color, #8fd3ff); }
+    .car-icon .window { fill: #0b1b3a; opacity: .9; }
+    .car-icon .wheel { fill: #050505; }
+    .car-icon .rim { fill: #eef7ff; }
+    .car-icon .light { fill: #fff7b8; }
+
+    .car-icon.c1 { bottom: 105px; --car-color: #8fd3ff; animation-duration: 8s; animation-delay: 0s; }
+    .car-icon.c2 { bottom: 155px; --car-color: #ffd3ec; animation-duration: 10s; animation-delay: -2s; transform: scale(.9); }
+    .car-icon.c3 { bottom: 215px; --car-color: #c7ffb8; animation-duration: 12s; animation-delay: -5s; transform: scale(.8); }
+    .car-icon.c4 { bottom: 275px; --car-color: #ffe08a; animation-duration: 14s; animation-delay: -7s; transform: scale(.7); }
+    .car-icon.c5 { bottom: 340px; --car-color: #c9b8ff; animation-duration: 16s; animation-delay: -9s; transform: scale(.62); }
+    .car-icon.c6 { bottom: 405px; --car-color: #ff9fc8; animation-duration: 18s; animation-delay: -12s; transform: scale(.55); }
+    .car-icon.c7 { bottom: 470px; --car-color: #9fffea; animation-duration: 20s; animation-delay: -15s; transform: scale(.5); opacity: .82; }
+    .car-icon.c8 { bottom: 530px; --car-color: #ffffff; animation-duration: 22s; animation-delay: -18s; transform: scale(.45); opacity: .72; }
+
+    @keyframes flyCar {
+      0% { left: -180px; margin-bottom: 0; }
+      50% { margin-bottom: 16px; }
+      100% { left: calc(100vw + 180px); margin-bottom: 0; }
+    }
+
     .road {
       position: absolute;
       left: 0;
@@ -181,58 +221,83 @@
     }
 
     .car-wrap {
-      position: absolute;
-      left: -520px;
-      bottom: 82px;
-      width: min(460px, 78vw);
-      z-index: 6;
-      animation: drive 10s linear infinite;
-      filter: drop-shadow(0 24px 26px rgba(0,0,0,0.66));
-    }
+  position: absolute;
+  left: -520px;
+  bottom: 86px;
+  width: min(420px, 70vw);
+  z-index: 6;
+  animation: drive 12s linear infinite;
+  filter: none;
+}
+
 
     .car {
-      width: 100%;
-      display: block;
-      border-radius: 20px;
-      object-fit: contain;
-      animation: carBounce 0.72s ease-in-out infinite alternate;
-    }
+  width: 100%;
+  display: block;
+  border-radius: 20px;
+  object-fit: cover;
+  animation: toyBounce 0.4s ease-in-out infinite alternate;
+  filter: saturate(1.8) contrast(1.2) brightness(1.1);
+  box-shadow: 0 12px 0 #111, 0 20px 25px rgba(0,0,0,0.6);
+  transform: scale(0.9);
+}
+
 
     .headlight {
-      position: absolute;
-      right: -180px;
-      bottom: 52px;
-      width: 230px;
-      height: 72px;
-      background: linear-gradient(90deg, rgba(0,229,255,0.75), rgba(141,230,255,0.28), transparent);
-      clip-path: polygon(0 35%, 100% 0, 100% 100%, 0 68%);
-      filter: blur(7px);
-      opacity: 0.82;
-      animation: lightPulse 1.6s ease-in-out infinite alternate;
-    }
+  position: absolute;
+  right: -235px;
+  bottom: 73px;
+  width: 310px;
+  height: 82px;
+  background: linear-gradient(90deg, rgba(210,245,255,0.88), rgba(0,229,255,0.34), transparent);
+  clip-path: polygon(0 42%, 100% 0, 100% 100%, 0 64%);
+  filter: blur(9px);
+  opacity: 0.85;
+  animation: lightPulse 1.35s ease-in-out infinite alternate;
+}
 
     .tail-glow {
-      position: absolute;
-      left: -150px;
-      bottom: 58px;
-      width: 180px;
-      height: 42px;
-      background: linear-gradient(90deg, transparent, rgba(255,70,140,0.62));
-      filter: blur(10px);
-      opacity: 0.72;
-    }
+  position: absolute;
+  left: -170px;
+  bottom: 82px;
+  width: 230px;
+  height: 46px;
+  background: linear-gradient(90deg, transparent, rgba(255,50,115,0.62));
+  filter: blur(12px);
+  opacity: 0.78;
+}
 
-    .reflection {
-      position: absolute;
-      left: 8%;
-      bottom: -32px;
-      width: 84%;
-      height: 48px;
-      background: radial-gradient(ellipse, rgba(255,255,255,0.22), transparent 70%);
-      filter: blur(12px);
-      opacity: 0.45;
-      transform: scaleY(0.45);
-    }
+    .motion-blur {
+  position: absolute;
+  inset: 18% 8% 24% -26%;
+  background: linear-gradient(90deg, transparent, rgba(210,245,255,0.12), rgba(255,255,255,0.03));
+  filter: blur(16px);
+  transform: skewX(-16deg);
+  z-index: -1;
+  opacity: 0.75;
+}
+
+.cinema-tint {
+  position: absolute;
+  inset: 12% 3% 18% 3%;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(2,8,28,0.52), transparent 46%, rgba(0,0,0,0.42)), linear-gradient(90deg, rgba(0,229,255,0.22), transparent 55%, rgba(255,143,199,0.14));
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.reflection {
+  position: absolute;
+  left: 10%;
+  bottom: 8px;
+  width: 82%;
+  height: 38px;
+  background: radial-gradient(ellipse, rgba(0,229,255,0.22), rgba(255,255,255,0.12), transparent 72%);
+  filter: blur(14px);
+  opacity: 0.5;
+  transform: scaleY(0.36);
+}
 
     .cloud {
       position: absolute;
@@ -340,8 +405,13 @@
       to { transform: translateX(calc(100vw + 1040px)); }
     }
 
-    @keyframes carBounce {
-      from { transform: translateY(0); }
+    @keyframes toyBounce {
+  from { transform: translateY(0) scale(0.9) rotate(-0.5deg); }
+  to { transform: translateY(-8px) scale(0.92) rotate(0.5deg); }
+}
+
+      to { transform: translateY(-3px) skewX(0.4deg); }
+    }
       to { transform: translateY(-5px); }
     }
 
@@ -438,20 +508,15 @@
 
     <div class="scene-glow"></div>
 
-    <div class="car-wrap">
-      <div class="tail-glow"></div>
-      <div class="headlight"></div>
-      <img class="car" src="vinfast-vf8-1.png" alt="VF8">
-      <img class="car" src="images.jpg" alt="image" style="margin-top:10px;">
-      <img class="car" src="Tải xuống.jpg" alt="download" style="margin-top:10px;">
-      <div class="reflection"></div>
-    </div>
-      <div class="headlight"></div>
-      <img class="car" src="vinfast-vf8-1.png" alt="VinFast VF8" onerror="document.getElementById('carError').style.display='block'">
-      <div class="reflection"></div>
-    </div>
-
-    <div id="carError" class="car-error">⚠️ Không tìm thấy ảnh: tải xuống.jpg — hãy đặt ảnh cùng thư mục với index.html</div>
+    <!-- Vector car icons (no image) -->
+    <div class="car-icon c1" aria-hidden="true"><svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg"><path class="body" d="M18 55 L34 38 C42 30 54 26 72 26 L122 26 C139 26 150 33 158 45 L178 55 L184 68 L24 68 Z"/><path class="window" d="M60 31 H119 C132 31 142 37 149 47 H55 C51 47 52 37 60 31 Z"/><circle class="wheel" cx="62" cy="68" r="12"/><circle class="wheel" cx="145" cy="68" r="12"/><circle class="rim" cx="62" cy="68" r="5"/><circle class="rim" cx="145" cy="68" r="5"/><circle class="light" cx="176" cy="57" r="4"/></svg></div>
+    <div class="car-icon c2" aria-hidden="true"><svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg"><path class="body" d="M18 55 L34 38 C42 30 54 26 72 26 L122 26 C139 26 150 33 158 45 L178 55 L184 68 L24 68 Z"/><path class="window" d="M60 31 H119 C132 31 142 37 149 47 H55 C51 47 52 37 60 31 Z"/><circle class="wheel" cx="62" cy="68" r="12"/><circle class="wheel" cx="145" cy="68" r="12"/><circle class="rim" cx="62" cy="68" r="5"/><circle class="rim" cx="145" cy="68" r="5"/><circle class="light" cx="176" cy="57" r="4"/></svg></div>
+    <div class="car-icon c3" aria-hidden="true"><svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg"><path class="body" d="M18 55 L34 38 C42 30 54 26 72 26 L122 26 C139 26 150 33 158 45 L178 55 L184 68 L24 68 Z"/><path class="window" d="M60 31 H119 C132 31 142 37 149 47 H55 C51 47 52 37 60 31 Z"/><circle class="wheel" cx="62" cy="68" r="12"/><circle class="wheel" cx="145" cy="68" r="12"/><circle class="rim" cx="62" cy="68" r="5"/><circle class="rim" cx="145" cy="68" r="5"/><circle class="light" cx="176" cy="57" r="4"/></svg></div>
+    <div class="car-icon c4" aria-hidden="true"><svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg"><path class="body" d="M18 55 L34 38 C42 30 54 26 72 26 L122 26 C139 26 150 33 158 45 L178 55 L184 68 L24 68 Z"/><path class="window" d="M60 31 H119 C132 31 142 37 149 47 H55 C51 47 52 37 60 31 Z"/><circle class="wheel" cx="62" cy="68" r="12"/><circle class="wheel" cx="145" cy="68" r="12"/><circle class="rim" cx="62" cy="68" r="5"/><circle class="rim" cx="145" cy="68" r="5"/><circle class="light" cx="176" cy="57" r="4"/></svg></div>
+    <div class="car-icon c5" aria-hidden="true"><svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg"><path class="body" d="M18 55 L34 38 C42 30 54 26 72 26 L122 26 C139 26 150 33 158 45 L178 55 L184 68 L24 68 Z"/><path class="window" d="M60 31 H119 C132 31 142 37 149 47 H55 C51 47 52 37 60 31 Z"/><circle class="wheel" cx="62" cy="68" r="12"/><circle class="wheel" cx="145" cy="68" r="12"/><circle class="rim" cx="62" cy="68" r="5"/><circle class="rim" cx="145" cy="68" r="5"/><circle class="light" cx="176" cy="57" r="4"/></svg></div>
+    <div class="car-icon c6" aria-hidden="true"><svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg"><path class="body" d="M18 55 L34 38 C42 30 54 26 72 26 L122 26 C139 26 150 33 158 45 L178 55 L184 68 L24 68 Z"/><path class="window" d="M60 31 H119 C132 31 142 37 149 47 H55 C51 47 52 37 60 31 Z"/><circle class="wheel" cx="62" cy="68" r="12"/><circle class="wheel" cx="145" cy="68" r="12"/><circle class="rim" cx="62" cy="68" r="5"/><circle class="rim" cx="145" cy="68" r="5"/><circle class="light" cx="176" cy="57" r="4"/></svg></div>
+    <div class="car-icon c7" aria-hidden="true"><svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg"><path class="body" d="M18 55 L34 38 C42 30 54 26 72 26 L122 26 C139 26 150 33 158 45 L178 55 L184 68 L24 68 Z"/><path class="window" d="M60 31 H119 C132 31 142 37 149 47 H55 C51 47 52 37 60 31 Z"/><circle class="wheel" cx="62" cy="68" r="12"/><circle class="wheel" cx="145" cy="68" r="12"/><circle class="rim" cx="62" cy="68" r="5"/><circle class="rim" cx="145" cy="68" r="5"/><circle class="light" cx="176" cy="57" r="4"/></svg></div>
+    <div class="car-icon c8" aria-hidden="true"><svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg"><path class="body" d="M18 55 L34 38 C42 30 54 26 72 26 L122 26 C139 26 150 33 158 45 L178 55 L184 68 L24 68 Z"/><path class="window" d="M60 31 H119 C132 31 142 37 149 47 H55 C51 47 52 37 60 31 Z"/><circle class="wheel" cx="62" cy="68" r="12"/><circle class="wheel" cx="145" cy="68" r="12"/><circle class="rim" cx="62" cy="68" r="5"/><circle class="rim" cx="145" cy="68" r="5"/><circle class="light" cx="176" cy="57" r="4"/></svg></div>
 
     <div class="road"></div>
   </main>
