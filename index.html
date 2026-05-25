@@ -1,598 +1,425 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chúc Phương Mai ngủ ngon - VF8</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh toán trực tuyến</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #eef5ff, #f8fafc);
+            margin: 0;
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+        .payment-container {
+            background: #ffffff;
+            border-radius: 22px;
+            box-shadow: 0 18px 45px rgba(0, 51, 102, 0.12);
+            padding: 30px;
+            max-width: 460px;
+            width: 100%;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+        }
 
-    body {
-      min-height: 100vh;
-      overflow: hidden;
-      font-family: "Segoe UI", Arial, sans-serif;
-      color: #ffffff;
-      background:
-        radial-gradient(circle at 75% 18%, rgba(255, 235, 190, 0.28), transparent 8%),
-        radial-gradient(circle at 20% 30%, rgba(0, 229, 255, 0.18), transparent 22%),
-        radial-gradient(circle at 50% 80%, rgba(255, 120, 200, 0.14), transparent 28%),
-        linear-gradient(180deg, #030414 0%, #090d2d 38%, #171750 70%, #221038 100%);
-    }
+        .payment-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 7px;
+            background: linear-gradient(90deg, #0056b3, #00a6ff);
+        }
 
-    .page {
-      position: relative;
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-    }
+        .title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
 
-    .aurora {
-      position: absolute;
-      inset: -20%;
-      background:
-        radial-gradient(circle at 20% 20%, rgba(0, 229, 255, 0.22), transparent 25%),
-        radial-gradient(circle at 80% 35%, rgba(255, 143, 199, 0.18), transparent 28%),
-        radial-gradient(circle at 50% 80%, rgba(128, 90, 255, 0.2), transparent 30%);
-      filter: blur(38px);
-      animation: auroraMove 12s ease-in-out infinite alternate;
-      z-index: 0;
-    }
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 24px;
+        }
 
-    .moon {
-      position: absolute;
-      top: 52px;
-      right: 88px;
-      width: 115px;
-      height: 115px;
-      border-radius: 50%;
-      background: #fff2b8;
-      box-shadow: 0 0 35px #fff2b8, 0 0 95px rgba(255, 226, 160, 0.55);
-      animation: moonFloat 4.5s ease-in-out infinite alternate;
-      z-index: 2;
-    }
+        .product-box {
+            display: flex;
+            gap: 14px;
+            background: #f8fbff;
+            border: 1px solid #e3efff;
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
 
-    .moon::after {
-      content: "";
-      position: absolute;
-      top: 13px;
-      left: 26px;
-      width: 106px;
-      height: 106px;
-      border-radius: 50%;
-      background: #060824;
-    }
+        .product-img {
+            width: 78px;
+            height: 78px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 34px;
+            flex-shrink: 0;
+        }
 
-    .hero {
-      position: relative;
-      z-index: 5;
-      width: min(920px, calc(100% - 34px));
-      margin: 72px auto 0;
-      padding: 34px 30px;
-      border: 1px solid rgba(255,255,255,0.18);
-      border-radius: 32px;
-      background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.045));
-      backdrop-filter: blur(14px);
-      box-shadow: 0 30px 90px rgba(0,0,0,0.32), inset 0 0 40px rgba(255,255,255,0.04);
-      text-align: center;
-      animation: heroIn 1.2s ease both;
-    }
+        .product-info {
+            flex: 1;
+        }
 
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 9px 17px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.18);
-      background: rgba(0,229,255,0.08);
-      color: #c9f7ff;
-      font-size: 15px;
-      letter-spacing: 0.2px;
-      margin-bottom: 18px;
-      box-shadow: 0 0 24px rgba(0,229,255,0.12);
-    }
+        .product-name {
+            font-size: 17px;
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 6px;
+        }
 
-    h1 {
-      font-size: clamp(2.35rem, 7vw, 5.6rem);
-      line-height: 1.03;
-      font-weight: 800;
-      letter-spacing: -1.6px;
-      color: #ffffff;
-      text-shadow: 0 0 18px rgba(255,255,255,0.8), 0 0 42px rgba(0,229,255,0.55), 0 0 72px rgba(255,143,199,0.35);
-      animation: titleGlow 2.3s ease-in-out infinite alternate;
-    }
+        .product-desc {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
 
-    .name {
-      color: #ffd3ec;
-      text-shadow: 0 0 18px rgba(255,143,199,0.9), 0 0 45px rgba(255,143,199,0.55);
-    }
+        .product-price {
+            font-size: 20px;
+            font-weight: 900;
+            color: #dc2626;
+        }
 
-    .subtitle {
-      max-width: 760px;
-      margin: 18px auto 0;
-      color: #e9edff;
-      font-size: clamp(1.05rem, 2.5vw, 1.45rem);
-      line-height: 1.65;
-      opacity: 0.94;
-    }
+        .section-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: #1e293b;
+            margin: 18px 0 10px;
+        }
 
-    .quote {
-      margin: 20px auto 0;
-      width: fit-content;
-      max-width: 100%;
-      padding: 12px 18px;
-      border-radius: 18px;
-      background: rgba(255,255,255,0.08);
-      color: #fff0fb;
-      font-size: clamp(0.98rem, 2vw, 1.12rem);
-      box-shadow: 0 0 30px rgba(255,143,199,0.08);
-    }
+        .method-list {
+            display: grid;
+            gap: 10px;
+        }
 
-    .scene-glow {
-      position: absolute;
-      left: 50%;
-      bottom: 90px;
-      width: min(760px, 90vw);
-      height: 130px;
-      transform: translateX(-50%);
-      border-radius: 50%;
-      background: radial-gradient(ellipse, rgba(0,229,255,0.24), transparent 70%);
-      filter: blur(18px);
-      z-index: 1;
-    }
+        .method-item {
+            border: 2px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: 0.2s;
+            background: #fff;
+        }
 
-    /* --- Many vector car icons (flying, no images) --- */
-    .car-icon {
-      position: absolute;
-      left: -160px;
-      width: 110px;
-      height: 52px;
-      z-index: 7;
-      animation-name: flyCar;
-      animation-timing-function: linear;
-      animation-iteration-count: infinite;
-      filter: drop-shadow(0 0 12px rgba(0,229,255,0.35)) drop-shadow(0 8px 10px rgba(0,0,0,0.55));
-    }
+        .method-item:hover {
+            border-color: #93c5fd;
+            background: #f8fbff;
+        }
 
-    .car-icon svg {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
+        .method-item.active {
+            border-color: #2563eb;
+            background: #eff6ff;
+        }
 
-    .car-icon .body { fill: var(--car-color, #8fd3ff); }
-    .car-icon .window { fill: #0b1b3a; opacity: .9; }
-    .car-icon .wheel { fill: #050505; }
-    .car-icon .rim { fill: #eef7ff; }
-    .car-icon .light { fill: #fff7b8; }
+        .method-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #e0f2fe;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
 
-    .car-icon.c1 { bottom: 105px; --car-color: #8fd3ff; animation-duration: 8s; animation-delay: 0s; }
-    .car-icon.c2 { bottom: 155px; --car-color: #ffd3ec; animation-duration: 10s; animation-delay: -2s; transform: scale(.9); }
-    .car-icon.c3 { bottom: 215px; --car-color: #c7ffb8; animation-duration: 12s; animation-delay: -5s; transform: scale(.8); }
-    .car-icon.c4 { bottom: 275px; --car-color: #ffe08a; animation-duration: 14s; animation-delay: -7s; transform: scale(.7); }
-    .car-icon.c5 { bottom: 340px; --car-color: #c9b8ff; animation-duration: 16s; animation-delay: -9s; transform: scale(.62); }
-    .car-icon.c6 { bottom: 405px; --car-color: #ff9fc8; animation-duration: 18s; animation-delay: -12s; transform: scale(.55); }
-    .car-icon.c7 { bottom: 470px; --car-color: #9fffea; animation-duration: 20s; animation-delay: -15s; transform: scale(.5); opacity: .82; }
-    .car-icon.c8 { bottom: 530px; --car-color: #ffffff; animation-duration: 22s; animation-delay: -18s; transform: scale(.45); opacity: .72; }
+        .method-name {
+            font-size: 15px;
+            font-weight: 800;
+            color: #111827;
+        }
 
-    @keyframes flyCar {
-      0% { left: -180px; margin-bottom: 0; }
-      50% { margin-bottom: 16px; }
-      100% { left: calc(100vw + 180px); margin-bottom: 0; }
-    }
+        .method-note {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 2px;
+        }
 
-    .road {
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 100%;
-      height: 175px;
-      background:
-        linear-gradient(180deg, rgba(5,8,22,0.05), rgba(4,5,16,0.94) 42%, #01020a 100%);
-      box-shadow: 0 -28px 100px rgba(0,229,255,0.18);
-      z-index: 3;
-    }
+        .qr-box {
+            display: none;
+            text-align: center;
+            border: 2px dashed #d9e7f7;
+            border-radius: 18px;
+            padding: 20px;
+            background: #ffffff;
+            margin-top: 16px;
+        }
 
-    .road::before {
-      content: "";
-      position: absolute;
-      top: 55px;
-      left: 0;
-      width: 220%;
-      height: 4px;
-      background: repeating-linear-gradient(90deg, transparent 0 72px, rgba(255,255,255,0.9) 72px 145px);
-      opacity: 0.72;
-      animation: roadLine 1.2s linear infinite;
-    }
+        .qr-box.show {
+            display: block;
+        }
 
-    .road::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(0,229,255,0.75), transparent);
-    }
+        .qr-box p {
+            margin: 0 0 14px;
+            font-size: 14px;
+            color: #475569;
+        }
 
-    .car-wrap {
-  position: absolute;
-  left: -520px;
-  bottom: 86px;
-  width: min(420px, 70vw);
-  z-index: 6;
-  animation: drive 12s linear infinite;
-  filter: none;
-}
+        .qr-image {
+            max-width: 220px;
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+        }
 
+        .payment-detail {
+            margin-top: 12px;
+            font-size: 13px;
+            color: #475569;
+            line-height: 1.6;
+        }
 
-    .car {
-  width: 100%;
-  display: block;
-  border-radius: 20px;
-  object-fit: cover;
-  animation: toyBounce 0.4s ease-in-out infinite alternate;
-  filter: saturate(1.8) contrast(1.2) brightness(1.1);
-  box-shadow: 0 12px 0 #111, 0 20px 25px rgba(0,0,0,0.6);
-  transform: scale(0.9);
-}
+        .btn-pay {
+            margin-top: 18px;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #0056b3, #008cff);
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: 0.2s;
+        }
 
+        .btn-pay:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 18px rgba(0, 86, 179, 0.25);
+        }
 
-    .headlight {
-  position: absolute;
-  right: -235px;
-  bottom: 73px;
-  width: 310px;
-  height: 82px;
-  background: linear-gradient(90deg, rgba(210,245,255,0.88), rgba(0,229,255,0.34), transparent);
-  clip-path: polygon(0 42%, 100% 0, 100% 100%, 0 64%);
-  filter: blur(9px);
-  opacity: 0.85;
-  animation: lightPulse 1.35s ease-in-out infinite alternate;
-}
+        .status-box {
+            text-align: center;
+            margin-top: 14px;
+            font-size: 13px;
+            color: #16a34a;
+            min-height: 20px;
+        }
 
-    .tail-glow {
-  position: absolute;
-  left: -170px;
-  bottom: 82px;
-  width: 230px;
-  height: 46px;
-  background: linear-gradient(90deg, transparent, rgba(255,50,115,0.62));
-  filter: blur(12px);
-  opacity: 0.78;
-}
-
-    .motion-blur {
-  position: absolute;
-  inset: 18% 8% 24% -26%;
-  background: linear-gradient(90deg, transparent, rgba(210,245,255,0.12), rgba(255,255,255,0.03));
-  filter: blur(16px);
-  transform: skewX(-16deg);
-  z-index: -1;
-  opacity: 0.75;
-}
-
-.cinema-tint {
-  position: absolute;
-  inset: 12% 3% 18% 3%;
-  border-radius: 18px;
-  background: linear-gradient(180deg, rgba(2,8,28,0.52), transparent 46%, rgba(0,0,0,0.42)), linear-gradient(90deg, rgba(0,229,255,0.22), transparent 55%, rgba(255,143,199,0.14));
-  mix-blend-mode: multiply;
-  pointer-events: none;
-  z-index: 2;
-}
-
-.reflection {
-  position: absolute;
-  left: 10%;
-  bottom: 8px;
-  width: 82%;
-  height: 38px;
-  background: radial-gradient(ellipse, rgba(0,229,255,0.22), rgba(255,255,255,0.12), transparent 72%);
-  filter: blur(14px);
-  opacity: 0.5;
-  transform: scaleY(0.36);
-}
-
-    .cloud {
-      position: absolute;
-      width: 230px;
-      height: 72px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.1);
-      filter: blur(1px);
-      z-index: 1;
-      animation: cloudMove 28s linear infinite;
-    }
-
-    .cloud::before,
-    .cloud::after {
-      content: "";
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.1);
-    }
-
-    .cloud::before {
-      width: 92px;
-      height: 92px;
-      top: -38px;
-      left: 34px;
-    }
-
-    .cloud::after {
-      width: 124px;
-      height: 124px;
-      top: -58px;
-      right: 24px;
-    }
-
-    .cloud.one { top: 305px; left: -280px; }
-    .cloud.two { top: 390px; left: -520px; transform: scale(0.72); animation-duration: 36s; animation-delay: 6s; }
-
-    .star {
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      background: #ffffff;
-      border-radius: 50%;
-      box-shadow: 0 0 10px #ffffff;
-      z-index: 1;
-      animation: twinkle 2s infinite alternate;
-    }
-
-    .shooting-star {
-      position: absolute;
-      width: 155px;
-      height: 2px;
-      background: linear-gradient(90deg, #ffffff, rgba(255,255,255,0));
-      border-radius: 999px;
-      filter: drop-shadow(0 0 10px #ffffff);
-      opacity: 0;
-      z-index: 2;
-      animation: shooting 4s linear infinite;
-    }
-
-    .s1 { top: 80px; left: 84%; animation-delay: 0s; }
-    .s2 { top: 180px; left: 66%; animation-delay: 1.6s; animation-duration: 4.7s; }
-    .s3 { top: 128px; left: 94%; animation-delay: 3.2s; animation-duration: 5.2s; }
-    .s4 { top: 260px; left: 78%; animation-delay: 5s; animation-duration: 6s; }
-
-    .car-error {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 135px;
-      color: #ffd1e8;
-      font-size: 14px;
-      text-align: center;
-      display: none;
-      z-index: 10;
-    }
-
-    @keyframes auroraMove {
-      from { transform: translate(-2%, -1%) rotate(0deg); }
-      to { transform: translate(3%, 2%) rotate(8deg); }
-    }
-
-    @keyframes moonFloat {
-      from { transform: translateY(0); }
-      to { transform: translateY(15px); }
-    }
-
-    @keyframes heroIn {
-      from { opacity: 0; transform: translateY(28px) scale(0.98); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    @keyframes titleGlow {
-      from { filter: brightness(0.95); }
-      to { filter: brightness(1.18); }
-    }
-
-    @keyframes roadLine {
-      from { transform: translateX(0); }
-      to { transform: translateX(-145px); }
-    }
-
-    @keyframes drive {
-      from { transform: translateX(0); }
-      to { transform: translateX(calc(100vw + 1040px)); }
-    }
-
-    @keyframes toyBounce {
-  from { transform: translateY(0) scale(0.9) rotate(-0.5deg); }
-  to { transform: translateY(-8px) scale(0.92) rotate(0.5deg); }
-}
-
-      to { transform: translateY(-3px) skewX(0.4deg); }
-    }
-      to { transform: translateY(-5px); }
-    }
-
-    @keyframes lightPulse {
-      from { opacity: 0.58; }
-      to { opacity: 0.95; }
-    }
-
-    @keyframes cloudMove {
-      from { left: -320px; }
-      to { left: 115%; }
-    }
-
-    @keyframes twinkle {
-      from { opacity: 0.25; transform: scale(0.75); }
-      to { opacity: 1; transform: scale(1.55); }
-    }
-
-    @keyframes shooting {
-      0% { transform: translate(0, 0) rotate(-25deg); opacity: 0; }
-      10% { opacity: 1; }
-      100% { transform: translate(-920px, 440px) rotate(-25deg); opacity: 0; }
-    }
-
-    @media (max-width: 680px) {
-      .hero {
-        margin-top: 80px;
-        padding: 26px 18px;
-        border-radius: 26px;
-      }
-
-      .moon {
-        top: 34px;
-        right: 28px;
-        width: 78px;
-        height: 78px;
-      }
-
-      .moon::after {
-        top: 9px;
-        left: 18px;
-        width: 72px;
-        height: 72px;
-      }
-
-      .badge {
-        font-size: 13px;
-      }
-
-      .subtitle {
-        font-size: 1rem;
-      }
-
-      .quote {
-        font-size: 0.94rem;
-      }
-
-      .road {
-        height: 140px;
-      }
-
-      .car-wrap {
-        bottom: 68px;
-        width: 320px;
-      }
-
-      .headlight {
-        right: -125px;
-        width: 165px;
-        height: 55px;
-      }
-    }
-  /* --- Password Gate --- */
-    .gate {
-      position: fixed; inset: 0; z-index: 9999;
-      display: flex; align-items: center; justify-content: center;
-      background: rgba(3,4,20,0.92);
-      backdrop-filter: blur(8px);
-    }
-    .gate-card {
-      width: min(420px, 92vw);
-      padding: 22px 20px 18px;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,0.18);
-      background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
-      box-shadow: 0 20px 60px rgba(0,0,0,0.45);
-      text-align: center;
-    }
-    .gate h3 { margin-bottom: 10px; }
-    .gate input {
-      width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.25);
-      background: rgba(0,0,0,0.35); color: #fff; outline: none; margin-top: 10px;
-    }
-    .gate button {
-      margin-top: 12px; width: 100%; padding: 10px 12px; border-radius: 10px; border: 0;
-      background: linear-gradient(90deg, #00e5ff, #ff8fc7); color: #081022; font-weight: 700; cursor: pointer;
-    }
-    .gate .err { color: #ff9fc8; font-size: 13px; margin-top: 8px; display:none; }
-    .shake { animation: shake .3s linear 1; }
-    @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
-
-  </style>
+        @media (max-width: 480px) {
+            body { padding: 14px; }
+            .payment-container { padding: 26px 18px; }
+            .product-box { align-items: flex-start; }
+        }
+    </style>
 </head>
 <body>
-  <!-- Password Gate -->
-  <div class="gate" id="gate">
-    <div class="gate-card" id="gateCard">
-      <h3>🔒 Nhập pass để vào</h3>
-      <p style="opacity:.8;font-size:14px">Gợi ý: số 1</p>
-      <input id="pwd" type="password" placeholder="Nhập pass..." />
-      <button id="btn">Vào</button>
-      <div class="err" id="err">Sai pass rồi 😅</div>
+
+    <div class="payment-container">
+        <div class="title">Thanh toán đơn hàng</div>
+        <div class="subtitle">Chọn phương thức thanh toán trực tuyến</div>
+
+        <div class="product-box">
+            <div class="product-img">🎧</div>
+            <div class="product-info">
+                <div class="product-name">Tai nghe Bluetooth MusicBox Pro</div>
+                <div class="product-desc">Số lượng: 1 • Mã đơn: DH99482</div>
+                <div class="product-price">150,000 đ</div>
+            </div>
+        </div>
+
+        <div class="section-title">Phương thức thanh toán</div>
+
+        <div class="method-list">
+            <div class="method-item active" onclick="selectMethod('vietqr', this)">
+                <div class="method-icon">🏦</div>
+                <div>
+                    <div class="method-name">VietQR / Chuyển khoản ngân hàng</div>
+                    <div class="method-note">Quét mã QR bằng app ngân hàng</div>
+                </div>
+            </div>
+
+            <div class="method-item" onclick="selectMethod('momo', this)">
+                <div class="method-icon">💜</div>
+                <div>
+                    <div class="method-name">Ví MoMo</div>
+                    <div class="method-note">Thanh toán qua ví điện tử MoMo</div>
+                </div>
+            </div>
+
+            <div class="method-item" onclick="selectMethod('zalopay', this)">
+                <div class="method-icon">💙</div>
+                <div>
+                    <div class="method-name">ZaloPay</div>
+                    <div class="method-note">Thanh toán nhanh bằng ZaloPay</div>
+                </div>
+            </div>
+
+            <div class="method-item" onclick="selectMethod('card', this)">
+                <div class="method-icon">💳</div>
+                <div>
+                    <div class="method-name">Thẻ ATM / Visa / Mastercard</div>
+                    <div class="method-note">Thanh toán bằng thẻ nội địa hoặc quốc tế</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="qr-box show" id="qrBox">
+            <p id="qrTitle">Quét mã VietQR để thanh toán</p>
+            <img class="qr-image" id="qrImage" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=DemoVietQR-DH99482-150000" alt="Mã QR thanh toán">
+            <div class="payment-detail" id="paymentDetail">
+                Nội dung chuyển khoản: <strong>DH99482</strong><br>
+                Số tiền: <strong>150,000 đ</strong>
+            </div>
+        </div>
+
+        <button class="btn-pay" onclick="confirmPayment()" id="payButton">Tiếp tục thanh toán</button>
+        <div class="status-box" id="statusBox"></div>
     </div>
-  </div>
-  <main class="page">
-    <div class="aurora"></div>
-    <div class="moon"></div>
 
-    <div class="cloud one"></div>
-    <div class="cloud two"></div>
+    <script>
+        let selectedMethod = 'vietqr';
+        let currentOrderCode = null;
+        let checkPaymentInterval = null;
 
-    <div class="shooting-star s1"></div>
-    <div class="shooting-star s2"></div>
-    <div class="shooting-star s3"></div>
-    <div class="shooting-star s4"></div>
+        function selectMethod(method, element) {
+            selectedMethod = method;
 
-    <section class="hero">
-      <div class="badge">✨ Night Drive with VF8</div>
-      <h1>Chúc <span class="name">Phương Mai</span><br>ngủ ngon 🌙</h1>
-      <p class="subtitle">Mong đêm nay thật yên bình, giấc mơ thật đẹp và ngày mai thức dậy với thật nhiều năng lượng tích cực.</p>
-      <div class="quote">VF8 chở lời chúc nhẹ nhàng băng qua bầu trời đêm ✨</div>
-    </section>
+            document.querySelectorAll('.method-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            element.classList.add('active');
 
-    <div class="scene-glow"></div>
+            const qrBox = document.getElementById('qrBox');
+            const qrTitle = document.getElementById('qrTitle');
+            const qrImage = document.getElementById('qrImage');
+            const paymentDetail = document.getElementById('paymentDetail');
+            const payButton = document.getElementById('payButton');
+            const statusBox = document.getElementById('statusBox');
+            statusBox.textContent = '';
 
-    <!-- Vector car icons (no image) -->
-    <div class="car-icon c1" aria-hidden="true"><svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg"><path class="body" d="M18 55 L34 38 C42 30 54 26 72 26 L122 26 C139 26 150 33 158 45 L178 55 L184 68 L24 68 Z"/><path class="window" d="M60 31 H119 C132 31 142 37 149 47 H55 C51 47 52 37 60 31 Z"/><circle class="wheel" cx="62" cy="68" r="12"/><circle class="wheel" cx="145" cy="68" r="12"/><circle class="rim" cx="62" cy="68" r="5"/><circle class="rim" cx="145" cy="68" r="5"/><circle class="light" cx="176" cy="57" r="4"/></svg></div>
-    <div class="car-icon c2" aria-hidden="true"><svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg"><path class="body" d="M18 55 L34 38 C42 30 54 26 72 26 L122 26 C139 26 150 33 158 45 L178 55 L184 68 L24 68 Z"/><path class="window" d="M60 31 H119 C132 31 142 37 149 47 H55 C51 47 52 37 60 31 Z"/><circle class="wheel" cx="62" cy="68" r="12"/><circle class="wheel" cx="145" cy="68" r="12"/><circle class="rim" cx="62" cy="68" r="5"/><circle class="rim" cx="145" cy="68" r="5"/><circle class="light" cx="176" cy="57" r="4"/></svg></div>
-    <div class="car-icon c3" aria-hidden="true"><svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg"><path class="body" d="M18 55 L34 38 C42 30 54 26 72 26 L122 26 C139 26 150 33 158 45 L178 55 L184 68 L24 68 Z"/><path class="window" d="M60 31 H119 C132 31 142 37 149 47 H55 C51 47 52 37 60 31 Z"/><circle class="wheel" cx="62" cy="68" r="12"/><circle class="wheel" cx="145" cy="68" r="12"/><circle class="rim" cx="62" cy="68" r="5"/><circle class="rim" cx="145" cy="68" r="5"/><circle class="light" cx="176" cy="57" r="4"/></svg></div>
-    <div class="car-icon c4" aria-hidden="true"><svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg"><path class="body" d="M18 55 L34 38 C42 30 54 26 72 26 L122 26 C139 26 150 33 158 45 L178 55 L184 68 L24 68 Z"/><path class="window" d="M60 31 H119 C132 31 142 37 149 47 H55 C51 47 52 37 60 31 Z"/><circle class="wheel" cx="62" cy="68" r="12"/><circle class="wheel" cx="145" cy="68" r="12"/><circle class="rim" cx="62" cy="68" r="5"/><circle class="rim" cx="145" cy="68" r="5"/><circle class="light" cx="176" cy="57" r="4"/></svg></div>
-    <div class="car-icon c5" aria-hidden="true"><svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg"><path class="body" d="M18 55 L34 38 C42 30 54 26 72 26 L122 26 C139 26 150 33 158 45 L178 55 L184 68 L24 68 Z"/><path class="window" d="M60 31 H119 C132 31 142 37 149 47 H55 C51 47 52 37 60 31 Z"/><circle class="wheel" cx="62" cy="68" r="12"/><circle class="wheel" cx="145" cy="68" r="12"/><circle class="rim" cx="62" cy="68" r="5"/><circle class="rim" cx="145" cy="68" r="5"/><circle class="light" cx="176" cy="57" r="4"/></svg></div>
-    <div class="car-icon c6" aria-hidden="true"><svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg"><path class="body" d="M18 55 L34 38 C42 30 54 26 72 26 L122 26 C139 26 150 33 158 45 L178 55 L184 68 L24 68 Z"/><path class="window" d="M60 31 H119 C132 31 142 37 149 47 H55 C51 47 52 37 60 31 Z"/><circle class="wheel" cx="62" cy="68" r="12"/><circle class="wheel" cx="145" cy="68" r="12"/><circle class="rim" cx="62" cy="68" r="5"/><circle class="rim" cx="145" cy="68" r="5"/><circle class="light" cx="176" cy="57" r="4"/></svg></div>
-    <div class="car-icon c7" aria-hidden="true"><svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg"><path class="body" d="M18 55 L34 38 C42 30 54 26 72 26 L122 26 C139 26 150 33 158 45 L178 55 L184 68 L24 68 Z"/><path class="window" d="M60 31 H119 C132 31 142 37 149 47 H55 C51 47 52 37 60 31 Z"/><circle class="wheel" cx="62" cy="68" r="12"/><circle class="wheel" cx="145" cy="68" r="12"/><circle class="rim" cx="62" cy="68" r="5"/><circle class="rim" cx="145" cy="68" r="5"/><circle class="light" cx="176" cy="57" r="4"/></svg></div>
-    <div class="car-icon c8" aria-hidden="true"><svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg"><path class="body" d="M18 55 L34 38 C42 30 54 26 72 26 L122 26 C139 26 150 33 158 45 L178 55 L184 68 L24 68 Z"/><path class="window" d="M60 31 H119 C132 31 142 37 149 47 H55 C51 47 52 37 60 31 Z"/><circle class="wheel" cx="62" cy="68" r="12"/><circle class="wheel" cx="145" cy="68" r="12"/><circle class="rim" cx="62" cy="68" r="5"/><circle class="rim" cx="145" cy="68" r="5"/><circle class="light" cx="176" cy="57" r="4"/></svg></div>
+            if (method === 'vietqr') {
+                qrBox.classList.add('show');
+                qrTitle.textContent = 'Thanh toán bằng PayOS / VietQR';
+                qrImage.src = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=PayOS-Demo-DH99482-150000';
+                paymentDetail.innerHTML = 'Bấm nút bên dưới để tạo QR thanh toán PayOS thật.<br>Số tiền: <strong>150,000 đ</strong>';
+                payButton.textContent = 'Tạo thanh toán PayOS';
+            }
 
-    <div class="road"></div>
-  </main>
+            if (method === 'momo') {
+                qrBox.classList.add('show');
+                qrTitle.textContent = 'Quét mã MoMo để thanh toán';
+                qrImage.src = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=DemoMoMo-DH99482-150000';
+                paymentDetail.innerHTML = 'Thanh toán qua ví MoMo<br>Số tiền: <strong>150,000 đ</strong>';
+                payButton.textContent = 'Thanh toán bằng MoMo';
+            }
 
-  <script>
-    const page = document.querySelector('.page');
+            if (method === 'zalopay') {
+                qrBox.classList.add('show');
+                qrTitle.textContent = 'Quét mã ZaloPay để thanh toán';
+                qrImage.src = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=DemoZaloPay-DH99482-150000';
+                paymentDetail.innerHTML = 'Thanh toán qua ZaloPay<br>Số tiền: <strong>150,000 đ</strong>';
+                payButton.textContent = 'Thanh toán bằng ZaloPay';
+            }
 
-    for (let i = 0; i < 170; i++) {
-      const star = document.createElement('div');
-      star.className = 'star';
-      star.style.top = Math.random() * window.innerHeight * 0.78 + 'px';
-      star.style.left = Math.random() * window.innerWidth + 'px';
-      star.style.animationDuration = (Math.random() * 2 + 1) + 's';
-      star.style.animationDelay = Math.random() * 2 + 's';
-      page.appendChild(star);
-    }
-  
-    // Gate logic
-    const gate = document.getElementById('gate');
-    const btn = document.getElementById('btn');
-    const pwd = document.getElementById('pwd');
-    const err = document.getElementById('err');
-    const card = document.getElementById('gateCard');
+            if (method === 'card') {
+                qrBox.classList.remove('show');
+                payButton.textContent = 'Nhập thông tin thẻ';
+            }
+        }
 
-    function tryLogin(){
-      if(pwd.value === '071003'){
-        gate.style.display = 'none';
-        document.body.style.overflow = 'hidden';
-      } else {
-        err.style.display = 'block';
-        card.classList.remove('shake');
-        void card.offsetWidth; // reflow
-        card.classList.add('shake');
-      }
-    }
-    btn.addEventListener('click', tryLogin);
-    pwd.addEventListener('keydown', (e)=>{ if(e.key==='Enter') tryLogin(); });
-  </script>
+        async function confirmPayment() {
+            const statusBox = document.getElementById('statusBox');
+            const qrBox = document.getElementById('qrBox');
+            const qrTitle = document.getElementById('qrTitle');
+            const qrImage = document.getElementById('qrImage');
+            const paymentDetail = document.getElementById('paymentDetail');
+
+            if (selectedMethod !== 'vietqr') {
+                statusBox.textContent = 'Phương thức này sẽ tích hợp sau.';
+                return;
+            }
+
+            try {
+                statusBox.textContent = 'Đang tạo mã thanh toán PayOS...';
+
+                const response = await fetch('http://localhost:3000/create-payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        productName: 'Tai nghe Bluetooth MusicBox Pro',
+                        quantity: 1,
+                        amount: 150000
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'Không tạo được thanh toán');
+                }
+
+                currentOrderCode = data.orderCode;
+
+                qrBox.classList.add('show');
+                qrTitle.textContent = 'Quét mã để chuyển khoản';
+
+                // Nếu backend trả qrCode thì hiện QR thật từ PayOS
+                // Nếu không có qrCode thì hiện QR từ checkoutUrl
+                const qrData = data.qrCode || data.checkoutUrl;
+                qrImage.src = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + encodeURIComponent(qrData);
+
+                paymentDetail.innerHTML = `
+                    Mã đơn: <strong>${data.orderCode}</strong><br>
+                    Nội dung CK: <strong>${data.description}</strong><br>
+                    Số tiền: <strong>150,000 đ</strong><br>
+                    <a href="${data.checkoutUrl}" target="_blank">Mở trang thanh toán PayOS</a>
+                `;
+
+                statusBox.textContent = 'Đang chờ chuyển khoản...';
+                startCheckingPayment();
+
+            } catch (error) {
+                statusBox.textContent = 'Lỗi: ' + error.message;
+            }
+        }
+
+        function startCheckingPayment() {
+            if (checkPaymentInterval) {
+                clearInterval(checkPaymentInterval);
+            }
+
+            checkPaymentInterval = setInterval(async () => {
+                if (!currentOrderCode) return;
+
+                try {
+                    const response = await fetch(`http://localhost:3000/payment-status/${currentOrderCode}`);
+                    const data = await response.json();
+
+                    if (data.status === 'PAID' || data.status === 'paid') {
+                        document.getElementById('statusBox').innerHTML = '✅ Thanh toán thành công. Đơn hàng đang được xử lý.';
+                        clearInterval(checkPaymentInterval);
+                    }
+                } catch (error) {
+                    console.log('Lỗi kiểm tra trạng thái:', error);
+                }
+            }, 3000);
+        }
+    </script>
+
 </body>
 </html>
