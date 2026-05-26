@@ -450,6 +450,7 @@
         }
 
         currentOrderCode = data.orderCode;
+        localStorage.setItem("currentOrderCode", data.orderCode);
 
         const qrData = data.qrCode || data.checkoutUrl;
         qrImage.src = "https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=" + encodeURIComponent(qrData);
@@ -467,7 +468,12 @@
         statusBox.innerHTML = "Đang chờ khách chuyển khoản...";
         payBtn.innerHTML = "Đang chờ thanh toán";
 
-        window.open(data.checkoutUrl, "_blank");
+        // Chuyển cùng tab sang trang PayOS.
+        // Khi thanh toán xong, PayOS sẽ tự quay lại cửa hàng theo returnUrl trong backend.
+        setTimeout(() => {
+          window.location.href = data.checkoutUrl;
+        }, 800);
+
         startCheckingPayment();
       } catch (error) {
         statusBox.className = "status error";
@@ -489,9 +495,12 @@
 
           if (data.status === "PAID" || data.status === "paid") {
             clearInterval(checkInterval);
+            localStorage.removeItem("currentOrderCode");
+
             document.getElementById("statusBox").className = "status";
             document.getElementById("statusBox").innerHTML = "✅ Thanh toán thành công.";
             document.getElementById("successBox").classList.add("show");
+            document.getElementById("payBtn").disabled = true;
             document.getElementById("payBtn").innerHTML = "Đã thanh toán";
           }
         } catch (error) {
@@ -499,6 +508,19 @@
         }
       }, 3000);
     }
-  </script>
+
+    // Khi PayOS thanh toán xong và tự quay lại cửa hàng,
+    // đoạn này sẽ tự kiểm tra lại trạng thái đơn hàng.
+    window.addEventListener("load", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const orderFromUrl = urlParams.get("orderCode");
+      const orderFromStorage = localStorage.getItem("currentOrderCode");
+
+      const savedOrderCode = orderFromUrl || orderFromStorage;
+
+      if (savedOrderCode) {
+        currentOrderCode = savedOrderCode;
+
+        document.getElementById
 </body>
 </html>
