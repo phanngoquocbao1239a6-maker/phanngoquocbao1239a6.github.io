@@ -291,7 +291,7 @@
         <div>
           <div class="product-name">Tai nghe Bluetooth MusicBox Pro</div>
           <div class="product-desc">Số lượng: 1 • Mã sản phẩm: MBP-001</div>
-          <div class="price">150,000 đ</div>
+          <div class="price">1,000 đ</div>
         </div>
       </div>
 
@@ -464,7 +464,7 @@
           body: JSON.stringify({
             productName: "Tai nghe Bluetooth MusicBox Pro",
             quantity: 1,
-            amount: 150000
+            amount: 1000
           })
         });
 
@@ -484,7 +484,7 @@
         paymentInfo.innerHTML = `
           Mã đơn: <strong>${data.orderCode}</strong><br>
           Nội dung CK: <strong>${data.description}</strong><br>
-          Số tiền: <strong>150,000 đ</strong><br>
+          Số tiền: <strong>1,000 đ</strong><br>
           <a class="link-pay" href="${data.checkoutUrl}" target="_blank">Mở trang thanh toán PayOS</a>
         `;
 
