@@ -5,10 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Thanh toán đơn hàng</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       min-height: 100vh;
@@ -19,38 +16,39 @@
       align-items: center;
       padding: 20px;
     }
-
     .container {
       width: 100%;
-      max-width: 480px;
+      max-width: 500px;
       background: #ffffff;
       border-radius: 24px;
       box-shadow: 0 18px 45px rgba(0, 51, 102, 0.14);
       overflow: hidden;
     }
-
     .header {
       background: linear-gradient(135deg, #0056b3, #008cff);
       color: #ffffff;
       padding: 24px;
       text-align: center;
     }
-
-    .header h1 {
-      margin: 0;
-      font-size: 24px;
+    .header h1 { margin: 0; font-size: 24px; }
+    .header p { margin: 8px 0 0; font-size: 14px; opacity: 0.92; }
+    .content { padding: 22px; }
+    .section-title {
+      font-size: 15px;
+      font-weight: bold;
+      margin: 20px 0 10px;
+      color: #1e293b;
     }
-
-    .header p {
-      margin: 8px 0 0;
-      font-size: 14px;
-      opacity: 0.92;
+    .product-select {
+      width: 100%;
+      padding: 13px;
+      border: 2px solid #dbeafe;
+      border-radius: 14px;
+      font-size: 15px;
+      outline: none;
+      background: #ffffff;
+      margin-bottom: 12px;
     }
-
-    .content {
-      padding: 22px;
-    }
-
     .product-box {
       display: flex;
       gap: 14px;
@@ -60,7 +58,6 @@
       padding: 14px;
       align-items: center;
     }
-
     .product-icon {
       width: 78px;
       height: 78px;
@@ -72,38 +69,10 @@
       font-size: 36px;
       flex-shrink: 0;
     }
-
-    .product-name {
-      font-size: 17px;
-      font-weight: bold;
-      color: #111827;
-      margin-bottom: 6px;
-    }
-
-    .product-desc {
-      font-size: 13px;
-      color: #64748b;
-      margin-bottom: 8px;
-    }
-
-    .price {
-      color: #dc2626;
-      font-size: 22px;
-      font-weight: bold;
-    }
-
-    .section-title {
-      font-size: 15px;
-      font-weight: bold;
-      margin: 20px 0 10px;
-      color: #1e293b;
-    }
-
-    .method-list {
-      display: grid;
-      gap: 10px;
-    }
-
+    .product-name { font-size: 17px; font-weight: bold; color: #111827; margin-bottom: 6px; }
+    .product-desc { font-size: 13px; color: #64748b; margin-bottom: 8px; }
+    .price { color: #dc2626; font-size: 22px; font-weight: bold; }
+    .method-list { display: grid; gap: 10px; }
     .method {
       border: 2px solid #e5e7eb;
       background: #ffffff;
@@ -115,17 +84,8 @@
       cursor: pointer;
       transition: 0.2s;
     }
-
-    .method:hover {
-      border-color: #93c5fd;
-      background: #f8fbff;
-    }
-
-    .method.active {
-      border-color: #2563eb;
-      background: #eff6ff;
-    }
-
+    .method:hover { border-color: #93c5fd; background: #f8fbff; }
+    .method.active { border-color: #2563eb; background: #eff6ff; }
     .method-icon {
       width: 44px;
       height: 44px;
@@ -137,20 +97,8 @@
       font-size: 24px;
       flex-shrink: 0;
     }
-
-    .method-name {
-      font-size: 15px;
-      font-weight: bold;
-      color: #111827;
-    }
-
-    .method-note {
-      font-size: 12px;
-      color: #64748b;
-      margin-top: 3px;
-      line-height: 1.4;
-    }
-
+    .method-name { font-size: 15px; font-weight: bold; color: #111827; }
+    .method-note { font-size: 12px; color: #64748b; margin-top: 3px; line-height: 1.4; }
     .qr-box {
       margin-top: 18px;
       border: 2px dashed #cbd5e1;
@@ -160,32 +108,15 @@
       display: none;
       background: #ffffff;
     }
-
-    .qr-box.show {
-      display: block;
-    }
-
-    .qr-title {
-      font-size: 15px;
-      font-weight: bold;
-      margin-bottom: 12px;
-      color: #0f172a;
-    }
-
+    .qr-box.show { display: block; }
+    .qr-title { font-size: 15px; font-weight: bold; margin-bottom: 12px; color: #0f172a; }
     .qr-image {
       width: 230px;
       max-width: 100%;
       border-radius: 12px;
       box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
     }
-
-    .payment-info {
-      margin-top: 12px;
-      font-size: 13px;
-      line-height: 1.6;
-      color: #475569;
-    }
-
+    .payment-info { margin-top: 12px; font-size: 13px; line-height: 1.6; color: #475569; }
     .btn {
       width: 100%;
       margin-top: 18px;
@@ -199,19 +130,8 @@
       cursor: pointer;
       transition: 0.2s;
     }
-
-    .btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 8px 18px rgba(0, 86, 179, 0.22);
-    }
-
-    .btn:disabled {
-      background: #94a3b8;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(0, 86, 179, 0.22); }
+    .btn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; box-shadow: none; }
     .status {
       margin-top: 16px;
       min-height: 24px;
@@ -221,15 +141,8 @@
       color: #16a34a;
       line-height: 1.5;
     }
-
-    .status.error {
-      color: #dc2626;
-    }
-
-    .status.pending {
-      color: #2563eb;
-    }
-
+    .status.error { color: #dc2626; }
+    .status.pending { color: #2563eb; }
     .link-pay {
       display: inline-block;
       margin-top: 8px;
@@ -237,7 +150,6 @@
       font-weight: bold;
       text-decoration: none;
     }
-
     .note {
       margin-top: 14px;
       font-size: 12px;
@@ -248,7 +160,6 @@
       padding: 10px;
       line-height: 1.5;
     }
-
     .success-box {
       display: none;
       margin-top: 16px;
@@ -262,19 +173,10 @@
       font-weight: bold;
       line-height: 1.5;
     }
-
-    .success-box.show {
-      display: block;
-    }
-
+    .success-box.show { display: block; }
     @media (max-width: 480px) {
-      .content {
-        padding: 18px;
-      }
-
-      .product-box {
-        align-items: flex-start;
-      }
+      .content { padding: 18px; }
+      .product-box { align-items: flex-start; }
     }
   </style>
 </head>
@@ -282,16 +184,25 @@
   <div class="container">
     <div class="header">
       <h1>Thanh toán đơn hàng</h1>
-      <p>Chọn phương thức thanh toán trực tuyến</p>
+      <p>Chọn sản phẩm, quét QR, thanh toán tự động qua PayOS</p>
     </div>
 
     <div class="content">
+      <div class="section-title">Chọn sản phẩm</div>
+
+      <select class="product-select" id="productSelect" onchange="changeProduct()">
+        <option value="headphone">Tai nghe Bluetooth MusicBox Pro - 150,000 đ</option>
+        <option value="speaker">Loa Mini MusicBox Bass - 250,000 đ</option>
+        <option value="microphone">Micro Karaoke Không Dây - 350,000 đ</option>
+        <option value="combo">Combo Tai nghe + Loa Mini - 380,000 đ</option>
+      </select>
+
       <div class="product-box">
-        <div class="product-icon">🎧</div>
+        <div class="product-icon" id="productIcon">🎧</div>
         <div>
-          <div class="product-name">Tai nghe Bluetooth MusicBox Pro</div>
-          <div class="product-desc">Số lượng: 1 • Mã sản phẩm: MBP-001</div>
-          <div class="price">1,000 đ</div>
+          <div class="product-name" id="productName">Tai nghe Bluetooth MusicBox Pro</div>
+          <div class="product-desc" id="productDesc">Số lượng: 1 • Mã sản phẩm: MBP-001</div>
+          <div class="price" id="productPrice">150,000 đ</div>
         </div>
       </div>
 
@@ -302,7 +213,7 @@
           <div class="method-icon">🏦</div>
           <div>
             <div class="method-name">VietQR / Chuyển khoản ngân hàng</div>
-            <div class="method-note">Tích hợp PayOS thật, quét QR và nhận thông báo khi tiền vào.</div>
+            <div class="method-note">PayOS tạo QR đúng số tiền, khách quét là hiện sẵn giá, không cần nhập tay.</div>
           </div>
         </div>
 
@@ -310,7 +221,7 @@
           <div class="method-icon">💜</div>
           <div>
             <div class="method-name">Ví MoMo</div>
-            <div class="method-note">Giao diện đã có sẵn, cần thêm API MoMo riêng để chạy thật.</div>
+            <div class="method-note">Giao diện đã có sẵn, cần API MoMo riêng để chạy thật.</div>
           </div>
         </div>
 
@@ -318,7 +229,7 @@
           <div class="method-icon">💙</div>
           <div>
             <div class="method-name">ZaloPay</div>
-            <div class="method-note">Giao diện đã có sẵn, cần thêm API ZaloPay riêng để chạy thật.</div>
+            <div class="method-note">Giao diện đã có sẵn, cần API ZaloPay riêng để chạy thật.</div>
           </div>
         </div>
 
@@ -345,9 +256,7 @@
         <div class="payment-info" id="paymentInfo"></div>
       </div>
 
-      <button class="btn" id="payBtn" onclick="handlePayment()">
-        Tạo thanh toán PayOS
-      </button>
+      <button class="btn" id="payBtn" onclick="handlePayment()">Tạo thanh toán PayOS</button>
 
       <div class="status" id="statusBox"></div>
 
@@ -356,7 +265,7 @@
       </div>
 
       <div class="note">
-        Lưu ý: PayOS đang được tích hợp thật cho phương thức VietQR. Sau khi khách chuyển khoản thành công, PayOS gửi webhook về backend Render và web tự hiện thông báo thành công.
+        Khi chọn sản phẩm, hệ thống gửi đúng tên sản phẩm và số tiền sang PayOS. QR tạo ra sẽ có sẵn số tiền, nội dung chuyển khoản và mã đơn hàng.
       </div>
     </div>
   </div>
@@ -364,17 +273,63 @@
   <script>
     const API_URL = "https://payos-backend.onrender.com";
 
+    const products = {
+      headphone: {
+        icon: "🎧",
+        name: "Tai nghe Bluetooth MusicBox Pro",
+        code: "MBP-001",
+        quantity: 1,
+        amount: 150000
+      },
+      speaker: {
+        icon: "🔊",
+        name: "Loa Mini MusicBox Bass",
+        code: "MBS-002",
+        quantity: 1,
+        amount: 250000
+      },
+      microphone: {
+        icon: "🎤",
+        name: "Micro Karaoke Không Dây",
+        code: "MIC-003",
+        quantity: 1,
+        amount: 350000
+      },
+      combo: {
+        icon: "🎵",
+        name: "Combo Tai nghe + Loa Mini",
+        code: "CBO-004",
+        quantity: 1,
+        amount: 380000
+      }
+    };
+
+    let selectedProduct = products.headphone;
     let selectedMethod = "payos";
     let currentOrderCode = null;
     let checkInterval = null;
 
+    function formatMoney(amount) {
+      return amount.toLocaleString("vi-VN") + " đ";
+    }
+
+    function changeProduct() {
+      const productKey = document.getElementById("productSelect").value;
+      selectedProduct = products[productKey];
+
+      document.getElementById("productIcon").innerHTML = selectedProduct.icon;
+      document.getElementById("productName").innerHTML = selectedProduct.name;
+      document.getElementById("productDesc").innerHTML = `Số lượng: ${selectedProduct.quantity} • Mã sản phẩm: ${selectedProduct.code}`;
+      document.getElementById("productPrice").innerHTML = formatMoney(selectedProduct.amount);
+
+      resetPaymentUI();
+      document.getElementById("payBtn").innerHTML = selectedMethod === "payos" ? "Tạo thanh toán PayOS" : document.getElementById("payBtn").innerHTML;
+    }
+
     function selectPaymentMethod(method, element) {
       selectedMethod = method;
 
-      document.querySelectorAll(".method").forEach((item) => {
-        item.classList.remove("active");
-      });
-
+      document.querySelectorAll(".method").forEach((item) => item.classList.remove("active"));
       element.classList.add("active");
 
       resetPaymentUI();
@@ -390,19 +345,19 @@
       if (method === "momo") {
         payBtn.innerHTML = "Thanh toán bằng MoMo";
         statusBox.className = "status pending";
-        statusBox.innerHTML = "Phương thức MoMo đã có giao diện, cần tích hợp API MoMo để chạy thật.";
+        statusBox.innerHTML = "Phương thức MoMo cần tích hợp API MoMo riêng để chạy thật.";
       }
 
       if (method === "zalopay") {
         payBtn.innerHTML = "Thanh toán bằng ZaloPay";
         statusBox.className = "status pending";
-        statusBox.innerHTML = "Phương thức ZaloPay đã có giao diện, cần tích hợp API ZaloPay để chạy thật.";
+        statusBox.innerHTML = "Phương thức ZaloPay cần tích hợp API ZaloPay riêng để chạy thật.";
       }
 
       if (method === "vnpay") {
         payBtn.innerHTML = "Thanh toán bằng VNPay / Thẻ";
         statusBox.className = "status pending";
-        statusBox.innerHTML = "Phương thức VNPay / Thẻ đã có giao diện, cần tích hợp API VNPay để chạy thật.";
+        statusBox.innerHTML = "Phương thức VNPay / Thẻ cần tích hợp API VNPay để chạy thật.";
       }
 
       if (method === "cod") {
@@ -413,10 +368,7 @@
     }
 
     function resetPaymentUI() {
-      if (checkInterval) {
-        clearInterval(checkInterval);
-      }
-
+      if (checkInterval) clearInterval(checkInterval);
       currentOrderCode = null;
 
       document.getElementById("qrBox").classList.remove("show");
@@ -435,7 +387,7 @@
 
       if (selectedMethod === "cod") {
         document.getElementById("statusBox").className = "status";
-        document.getElementById("statusBox").innerHTML = "✅ Đặt hàng COD thành công. Khách sẽ thanh toán khi nhận hàng.";
+        document.getElementById("statusBox").innerHTML = `✅ Đặt hàng COD thành công. Tổng tiền: ${formatMoney(selectedProduct.amount)}.`;
         return;
       }
 
@@ -454,17 +406,16 @@
       try {
         payBtn.disabled = true;
         statusBox.className = "status pending";
-        statusBox.innerHTML = "Đang tạo mã thanh toán PayOS...";
+        statusBox.innerHTML = "Đang tạo QR PayOS đúng số tiền sản phẩm...";
 
         const response = await fetch(`${API_URL}/create-payment`, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            productName: "Tai nghe Bluetooth MusicBox Pro",
-            quantity: 1,
-            amount: 1000
+            productName: selectedProduct.name,
+            productCode: selectedProduct.code,
+            quantity: selectedProduct.quantity,
+            amount: selectedProduct.amount
           })
         });
 
@@ -480,11 +431,11 @@
         qrImage.src = "https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=" + encodeURIComponent(qrData);
 
         qrTitle.innerHTML = "Quét mã QR để chuyển khoản";
-
         paymentInfo.innerHTML = `
+          Sản phẩm: <strong>${selectedProduct.name}</strong><br>
           Mã đơn: <strong>${data.orderCode}</strong><br>
           Nội dung CK: <strong>${data.description}</strong><br>
-          Số tiền: <strong>1,000 đ</strong><br>
+          Số tiền tự động: <strong>${formatMoney(selectedProduct.amount)}</strong><br>
           <a class="link-pay" href="${data.checkoutUrl}" target="_blank">Mở trang thanh toán PayOS</a>
         `;
 
@@ -493,7 +444,6 @@
         payBtn.innerHTML = "Đang chờ thanh toán";
 
         window.open(data.checkoutUrl, "_blank");
-
         startCheckingPayment();
       } catch (error) {
         statusBox.className = "status error";
@@ -504,9 +454,7 @@
     }
 
     function startCheckingPayment() {
-      if (checkInterval) {
-        clearInterval(checkInterval);
-      }
+      if (checkInterval) clearInterval(checkInterval);
 
       checkInterval = setInterval(async () => {
         if (!currentOrderCode) return;
@@ -517,7 +465,6 @@
 
           if (data.status === "PAID" || data.status === "paid") {
             clearInterval(checkInterval);
-
             document.getElementById("statusBox").className = "status";
             document.getElementById("statusBox").innerHTML = "✅ Thanh toán thành công.";
             document.getElementById("successBox").classList.add("show");
