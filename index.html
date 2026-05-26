@@ -191,6 +191,9 @@
       <div class="section-title">Chọn sản phẩm</div>
 
       <select class="product-select" id="productSelect" onchange="changeProduct()">
+        <option value="test1000">Món test 1.000đ - 1,000 đ</option>
+        <option value="test2000">Món test 2.000đ - 2,000 đ</option>
+        <option value="test5000">Món test 5.000đ - 5,000 đ</option>
         <option value="headphone">Tai nghe Bluetooth MusicBox Pro - 150,000 đ</option>
         <option value="speaker">Loa Mini MusicBox Bass - 250,000 đ</option>
         <option value="microphone">Micro Karaoke Không Dây - 350,000 đ</option>
@@ -198,11 +201,11 @@
       </select>
 
       <div class="product-box">
-        <div class="product-icon" id="productIcon">🎧</div>
+        <div class="product-icon" id="productIcon">🧪</div>
         <div>
-          <div class="product-name" id="productName">Tai nghe Bluetooth MusicBox Pro</div>
-          <div class="product-desc" id="productDesc">Số lượng: 1 • Mã sản phẩm: MBP-001</div>
-          <div class="price" id="productPrice">150,000 đ</div>
+          <div class="product-name" id="productName">Món test 1.000đ</div>
+          <div class="product-desc" id="productDesc">Số lượng: 1 • Mã sản phẩm: TEST-001</div>
+          <div class="price" id="productPrice">1,000 đ</div>
         </div>
       </div>
 
@@ -274,6 +277,27 @@
     const API_URL = "https://payos-backend.onrender.com";
 
     const products = {
+      test1000: {
+        icon: "🧪",
+        name: "Món test 1.000đ",
+        code: "TEST-001",
+        quantity: 1,
+        amount: 1000
+      },
+      test2000: {
+        icon: "🧾",
+        name: "Món test 2.000đ",
+        code: "TEST-002",
+        quantity: 1,
+        amount: 2000
+      },
+      test5000: {
+        icon: "🎁",
+        name: "Món test 5.000đ",
+        code: "TEST-005",
+        quantity: 1,
+        amount: 5000
+      },
       headphone: {
         icon: "🎧",
         name: "Tai nghe Bluetooth MusicBox Pro",
@@ -304,7 +328,7 @@
       }
     };
 
-    let selectedProduct = products.headphone;
+    let selectedProduct = products.test1000;
     let selectedMethod = "payos";
     let currentOrderCode = null;
     let checkInterval = null;
