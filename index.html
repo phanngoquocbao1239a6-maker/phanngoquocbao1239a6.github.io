@@ -521,6 +521,12 @@
       if (savedOrderCode) {
         currentOrderCode = savedOrderCode;
 
-        document.getElementById
+        document.getElementById("statusBox").className = "status pending";
+        document.getElementById("statusBox").innerHTML = "Đang kiểm tra trạng thái thanh toán...";
+
+        startCheckingPayment();
+      }
+    });
+  </script>
 </body>
 </html>
