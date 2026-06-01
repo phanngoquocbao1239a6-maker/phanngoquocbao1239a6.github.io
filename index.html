@@ -274,8 +274,7 @@
   </div>
 
   <script>
-    // ĐÃ ĐỔI: Sử dụng tên miền con mới phục vụ gọi API sang Render
-    const API_URL = "https://api.phanngoquocbao.id.vn";
+    const API_URL = "https://payos-backend.onrender.com";
 
     const products = {
       test1000: {
@@ -469,6 +468,8 @@
         statusBox.innerHTML = "Đang chờ khách chuyển khoản...";
         payBtn.innerHTML = "Đang chờ thanh toán";
 
+        // Chuyển cùng tab sang trang PayOS.
+        // Khi thanh toán xong, PayOS sẽ tự quay lại cửa hàng theo returnUrl trong backend.
         setTimeout(() => {
           window.location.href = data.checkoutUrl;
         }, 800);
@@ -508,6 +509,8 @@
       }, 3000);
     }
 
+    // Khi PayOS thanh toán xong và tự quay lại cửa hàng,
+    // đoạn này sẽ tự kiểm tra lại trạng thái đơn hàng.
     window.addEventListener("load", () => {
       const urlParams = new URLSearchParams(window.location.search);
       const orderFromUrl = urlParams.get("orderCode");
@@ -524,19 +527,46 @@
         startCheckingPayment();
       }
     });
-  </script>
-  <script>
-    const params = new URLSearchParams(window.location.search);
+    <script>
+const params =
+  new URLSearchParams(
+    window.location.search
+  );
 
-    if (params.get("success") === "true") {
-      alert("✅ Thanh toán thành công!");
-      window.history.replaceState({}, document.title, window.location.pathname);
-    }
+if (
+  params.get("success")
+  === "true"
+) {
 
-    if (params.get("cancel") === "true") {
-      alert("❌ Đã hủy thanh toán");
-      window.history.replaceState({}, document.title, window.location.pathname);
-    }
+  alert(
+    "✅ Thanh toán thành công!"
+  );
+
+  window.history.replaceState(
+    {},
+    document.title,
+    window.location.pathname
+  );
+
+}
+
+if (
+  params.get("cancel")
+  === "true"
+) {
+
+  alert(
+    "❌ Đã hủy thanh toán"
+  );
+
+  window.history.replaceState(
+    {},
+    document.title,
+    window.location.pathname
+  );
+
+}
+</script>
   </script>
 </body>
 </html>
