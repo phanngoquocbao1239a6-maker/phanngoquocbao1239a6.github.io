@@ -4,8 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Thanh toán đơn hàng</title>
+
   <style>
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       min-height: 100vh;
@@ -16,6 +18,7 @@
       align-items: center;
       padding: 20px;
     }
+
     .container {
       width: 100%;
       max-width: 500px;
@@ -24,21 +27,36 @@
       box-shadow: 0 18px 45px rgba(0, 51, 102, 0.14);
       overflow: hidden;
     }
+
     .header {
       background: linear-gradient(135deg, #0056b3, #008cff);
       color: #ffffff;
       padding: 24px;
       text-align: center;
     }
-    .header h1 { margin: 0; font-size: 24px; }
-    .header p { margin: 8px 0 0; font-size: 14px; opacity: 0.92; }
-    .content { padding: 22px; }
+
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .header p {
+      margin: 8px 0 0;
+      font-size: 14px;
+      opacity: 0.92;
+    }
+
+    .content {
+      padding: 22px;
+    }
+
     .section-title {
       font-size: 15px;
       font-weight: bold;
       margin: 20px 0 10px;
       color: #1e293b;
     }
+
     .product-select {
       width: 100%;
       padding: 13px;
@@ -49,6 +67,7 @@
       background: #ffffff;
       margin-bottom: 12px;
     }
+
     .product-box {
       display: flex;
       gap: 14px;
@@ -58,6 +77,7 @@
       padding: 14px;
       align-items: center;
     }
+
     .product-icon {
       width: 78px;
       height: 78px;
@@ -69,10 +89,31 @@
       font-size: 36px;
       flex-shrink: 0;
     }
-    .product-name { font-size: 17px; font-weight: bold; color: #111827; margin-bottom: 6px; }
-    .product-desc { font-size: 13px; color: #64748b; margin-bottom: 8px; }
-    .price { color: #dc2626; font-size: 22px; font-weight: bold; }
-    .method-list { display: grid; gap: 10px; }
+
+    .product-name {
+      font-size: 17px;
+      font-weight: bold;
+      color: #111827;
+      margin-bottom: 6px;
+    }
+
+    .product-desc {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
+
+    .price {
+      color: #dc2626;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .method-list {
+      display: grid;
+      gap: 10px;
+    }
+
     .method {
       border: 2px solid #e5e7eb;
       background: #ffffff;
@@ -84,8 +125,17 @@
       cursor: pointer;
       transition: 0.2s;
     }
-    .method:hover { border-color: #93c5fd; background: #f8fbff; }
-    .method.active { border-color: #2563eb; background: #eff6ff; }
+
+    .method:hover {
+      border-color: #93c5fd;
+      background: #f8fbff;
+    }
+
+    .method.active {
+      border-color: #2563eb;
+      background: #eff6ff;
+    }
+
     .method-icon {
       width: 44px;
       height: 44px;
@@ -97,8 +147,20 @@
       font-size: 24px;
       flex-shrink: 0;
     }
-    .method-name { font-size: 15px; font-weight: bold; color: #111827; }
-    .method-note { font-size: 12px; color: #64748b; margin-top: 3px; line-height: 1.4; }
+
+    .method-name {
+      font-size: 15px;
+      font-weight: bold;
+      color: #111827;
+    }
+
+    .method-note {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 3px;
+      line-height: 1.4;
+    }
+
     .qr-box {
       margin-top: 18px;
       border: 2px dashed #cbd5e1;
@@ -108,15 +170,32 @@
       display: none;
       background: #ffffff;
     }
-    .qr-box.show { display: block; }
-    .qr-title { font-size: 15px; font-weight: bold; margin-bottom: 12px; color: #0f172a; }
+
+    .qr-box.show {
+      display: block;
+    }
+
+    .qr-title {
+      font-size: 15px;
+      font-weight: bold;
+      margin-bottom: 12px;
+      color: #0f172a;
+    }
+
     .qr-image {
       width: 230px;
       max-width: 100%;
       border-radius: 12px;
       box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
     }
-    .payment-info { margin-top: 12px; font-size: 13px; line-height: 1.6; color: #475569; }
+
+    .payment-info {
+      margin-top: 12px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #475569;
+    }
+
     .btn {
       width: 100%;
       margin-top: 18px;
@@ -130,8 +209,19 @@
       cursor: pointer;
       transition: 0.2s;
     }
-    .btn:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(0, 86, 179, 0.22); }
-    .btn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(0, 86, 179, 0.22);
+    }
+
+    .btn:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
     .status {
       margin-top: 16px;
       min-height: 24px;
@@ -141,8 +231,15 @@
       color: #16a34a;
       line-height: 1.5;
     }
-    .status.error { color: #dc2626; }
-    .status.pending { color: #2563eb; }
+
+    .status.error {
+      color: #dc2626;
+    }
+
+    .status.pending {
+      color: #2563eb;
+    }
+
     .link-pay {
       display: inline-block;
       margin-top: 8px;
@@ -150,6 +247,7 @@
       font-weight: bold;
       text-decoration: none;
     }
+
     .note {
       margin-top: 14px;
       font-size: 12px;
@@ -160,6 +258,7 @@
       padding: 10px;
       line-height: 1.5;
     }
+
     .success-box {
       display: none;
       margin-top: 16px;
@@ -173,13 +272,23 @@
       font-weight: bold;
       line-height: 1.5;
     }
-    .success-box.show { display: block; }
+
+    .success-box.show {
+      display: block;
+    }
+
     @media (max-width: 480px) {
-      .content { padding: 18px; }
-      .product-box { align-items: flex-start; }
+      .content {
+        padding: 18px;
+      }
+
+      .product-box {
+        align-items: flex-start;
+      }
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <div class="header">
@@ -216,7 +325,7 @@
           <div class="method-icon">🏦</div>
           <div>
             <div class="method-name">VietQR / Chuyển khoản ngân hàng</div>
-            <div class="method-note">PayOS tạo QR đúng số tiền, khách quét là hiện sẵn giá, không cần nhập tay.</div>
+            <div class="method-note">PayOS tạo QR đúng số tiền, khách quét là hiện sẵn giá.</div>
           </div>
         </div>
 
@@ -224,7 +333,7 @@
           <div class="method-icon">💜</div>
           <div>
             <div class="method-name">Ví MoMo</div>
-            <div class="method-note">Giao diện đã có sẵn, cần API MoMo riêng để chạy thật.</div>
+            <div class="method-note">Cần API MoMo riêng để chạy thật.</div>
           </div>
         </div>
 
@@ -232,7 +341,7 @@
           <div class="method-icon">💙</div>
           <div>
             <div class="method-name">ZaloPay</div>
-            <div class="method-note">Giao diện đã có sẵn, cần API ZaloPay riêng để chạy thật.</div>
+            <div class="method-note">Cần API ZaloPay riêng để chạy thật.</div>
           </div>
         </div>
 
@@ -248,7 +357,7 @@
           <div class="method-icon">📦</div>
           <div>
             <div class="method-name">Thanh toán khi nhận hàng</div>
-            <div class="method-note">Không cần API, hệ thống ghi nhận đơn hàng chờ giao.</div>
+            <div class="method-note">Không cần API, hệ thống ghi nhận đơn hàng COD.</div>
           </div>
         </div>
       </div>
@@ -268,7 +377,7 @@
       </div>
 
       <div class="note">
-        Khi chọn sản phẩm, hệ thống gửi đúng tên sản phẩm và số tiền sang PayOS. QR tạo ra sẽ có sẵn số tiền, nội dung chuyển khoản và mã đơn hàng.
+        Khi chọn sản phẩm, hệ thống gửi đúng tên sản phẩm và số tiền sang PayOS.
       </div>
     </div>
   </div>
@@ -334,7 +443,7 @@
     let checkInterval = null;
 
     function formatMoney(amount) {
-      return amount.toLocaleString("vi-VN") + " đ";
+      return Number(amount).toLocaleString("vi-VN") + " đ";
     }
 
     function changeProduct() {
@@ -343,19 +452,25 @@
 
       document.getElementById("productIcon").innerHTML = selectedProduct.icon;
       document.getElementById("productName").innerHTML = selectedProduct.name;
-      document.getElementById("productDesc").innerHTML = `Số lượng: ${selectedProduct.quantity} • Mã sản phẩm: ${selectedProduct.code}`;
+      document.getElementById("productDesc").innerHTML =
+        `Số lượng: ${selectedProduct.quantity} • Mã sản phẩm: ${selectedProduct.code}`;
       document.getElementById("productPrice").innerHTML = formatMoney(selectedProduct.amount);
 
       resetPaymentUI();
-      document.getElementById("payBtn").innerHTML = selectedMethod === "payos" ? "Tạo thanh toán PayOS" : document.getElementById("payBtn").innerHTML;
+
+      if (selectedMethod === "payos") {
+        document.getElementById("payBtn").innerHTML = "Tạo thanh toán PayOS";
+      }
     }
 
     function selectPaymentMethod(method, element) {
       selectedMethod = method;
 
-      document.querySelectorAll(".method").forEach((item) => item.classList.remove("active"));
-      element.classList.add("active");
+      document.querySelectorAll(".method").forEach((item) => {
+        item.classList.remove("active");
+      });
 
+      element.classList.add("active");
       resetPaymentUI();
 
       const payBtn = document.getElementById("payBtn");
@@ -392,7 +507,10 @@
     }
 
     function resetPaymentUI() {
-      if (checkInterval) clearInterval(checkInterval);
+      if (checkInterval) {
+        clearInterval(checkInterval);
+      }
+
       currentOrderCode = null;
 
       document.getElementById("qrBox").classList.remove("show");
@@ -411,12 +529,14 @@
 
       if (selectedMethod === "cod") {
         document.getElementById("statusBox").className = "status";
-        document.getElementById("statusBox").innerHTML = `✅ Đặt hàng COD thành công. Tổng tiền: ${formatMoney(selectedProduct.amount)}.`;
+        document.getElementById("statusBox").innerHTML =
+          `✅ Đặt hàng COD thành công. Tổng tiền: ${formatMoney(selectedProduct.amount)}.`;
         return;
       }
 
       document.getElementById("statusBox").className = "status error";
-      document.getElementById("statusBox").innerHTML = "Phương thức này cần đăng ký API riêng trước khi chạy thanh toán thật.";
+      document.getElementById("statusBox").innerHTML =
+        "Phương thức này cần đăng ký API riêng trước khi chạy thanh toán thật.";
     }
 
     async function createPayOSPayment() {
@@ -434,7 +554,9 @@
 
         const response = await fetch(`${API_URL}/create-payment`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json"
+          },
           body: JSON.stringify({
             productName: selectedProduct.name,
             productCode: selectedProduct.code,
@@ -445,7 +567,7 @@
 
         const data = await response.json();
 
-        if (!response.ok) {
+        if (!response.ok || !data.success) {
           throw new Error(data.message || "Không tạo được thanh toán");
         }
 
@@ -453,28 +575,31 @@
         localStorage.setItem("currentOrderCode", data.orderCode);
 
         const qrData = data.qrCode || data.checkoutUrl;
-        qrImage.src = "https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=" + encodeURIComponent(qrData);
+
+        qrImage.src =
+          "https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=" +
+          encodeURIComponent(qrData);
 
         qrTitle.innerHTML = "Quét mã QR để chuyển khoản";
+
         paymentInfo.innerHTML = `
           Sản phẩm: <strong>${selectedProduct.name}</strong><br>
           Mã đơn: <strong>${data.orderCode}</strong><br>
           Nội dung CK: <strong>${data.description}</strong><br>
-          Số tiền tự động: <strong>${formatMoney(selectedProduct.amount)}</strong><br>
-          <a class="link-pay" href="${data.checkoutUrl}" target="_blank">Mở trang thanh toán PayOS</a>
+          Số tiền: <strong>${formatMoney(selectedProduct.amount)}</strong><br>
+          <a class="link-pay" href="${data.checkoutUrl}" target="_blank">
+            Mở trang thanh toán PayOS
+          </a>
         `;
 
         qrBox.classList.add("show");
-        statusBox.innerHTML = "Đang chờ khách chuyển khoản...";
+        statusBox.innerHTML = "Đang chuyển sang trang thanh toán PayOS...";
         payBtn.innerHTML = "Đang chờ thanh toán";
 
-        // Chuyển cùng tab sang trang PayOS.
-        // Khi thanh toán xong, PayOS sẽ tự quay lại cửa hàng theo returnUrl trong backend.
         setTimeout(() => {
           window.location.href = data.checkoutUrl;
         }, 800);
 
-        startCheckingPayment();
       } catch (error) {
         statusBox.className = "status error";
         statusBox.innerHTML = "❌ Lỗi: " + error.message;
@@ -484,7 +609,9 @@
     }
 
     function startCheckingPayment() {
-      if (checkInterval) clearInterval(checkInterval);
+      if (checkInterval) {
+        clearInterval(checkInterval);
+      }
 
       checkInterval = setInterval(async () => {
         if (!currentOrderCode) return;
@@ -509,8 +636,6 @@
       }, 3000);
     }
 
-    // Khi PayOS thanh toán xong và tự quay lại cửa hàng,
-    // đoạn này sẽ tự kiểm tra lại trạng thái đơn hàng.
     window.addEventListener("load", () => {
       const urlParams = new URLSearchParams(window.location.search);
       const orderFromUrl = urlParams.get("orderCode");
@@ -518,10 +643,18 @@
 
       const savedOrderCode = orderFromUrl || orderFromStorage;
 
+      if (savedOrderCode) {
+        currentOrderCode = savedOrderCode;
+
+        document.getElementById("statusBox").className = "status pending";
+        document.getElementById("statusBox").innerHTML =
+          "Đang kiểm tra trạng thái thanh toán...";
+
+        startCheckingPayment();
+      }
+
       if (urlParams.get("success") === "true") {
-        document.getElementById("statusBox").className = "status";
-        document.getElementById("statusBox").innerHTML = "✅ PayOS đã chuyển hướng về trang sau khi thanh toán. Đang kiểm tra trạng thái đơn hàng...";
-        document.getElementById("successBox").classList.add("show");
+        alert("✅ Thanh toán thành công!");
 
         window.history.replaceState(
           {},
@@ -531,23 +664,13 @@
       }
 
       if (urlParams.get("cancel") === "true") {
-        document.getElementById("statusBox").className = "status error";
-        document.getElementById("statusBox").innerHTML = "❌ Bạn đã hủy thanh toán.";
+        alert("❌ Đã hủy thanh toán");
 
         window.history.replaceState(
           {},
           document.title,
           window.location.pathname
         );
-      }
-
-      if (savedOrderCode) {
-        currentOrderCode = savedOrderCode;
-
-        document.getElementById("statusBox").className = "status pending";
-        document.getElementById("statusBox").innerHTML = "Đang kiểm tra trạng thái thanh toán...";
-
-        startCheckingPayment();
       }
     });
   </script>
