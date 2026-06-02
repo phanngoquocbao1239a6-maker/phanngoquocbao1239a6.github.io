@@ -274,7 +274,7 @@
   </div>
 
   <script>
-    const API_URL = "https://payos-backend.onrender.com";
+    const API_URL = "https://api.phanngoquocbao.id.vn";
 
     const products = {
       test1000: {
@@ -518,6 +518,29 @@
 
       const savedOrderCode = orderFromUrl || orderFromStorage;
 
+      if (urlParams.get("success") === "true") {
+        document.getElementById("statusBox").className = "status";
+        document.getElementById("statusBox").innerHTML = "✅ PayOS đã chuyển hướng về trang sau khi thanh toán. Đang kiểm tra trạng thái đơn hàng...";
+        document.getElementById("successBox").classList.add("show");
+
+        window.history.replaceState(
+          {},
+          document.title,
+          window.location.pathname
+        );
+      }
+
+      if (urlParams.get("cancel") === "true") {
+        document.getElementById("statusBox").className = "status error";
+        document.getElementById("statusBox").innerHTML = "❌ Bạn đã hủy thanh toán.";
+
+        window.history.replaceState(
+          {},
+          document.title,
+          window.location.pathname
+        );
+      }
+
       if (savedOrderCode) {
         currentOrderCode = savedOrderCode;
 
@@ -527,46 +550,6 @@
         startCheckingPayment();
       }
     });
-    <script>
-const params =
-  new URLSearchParams(
-    window.location.search
-  );
-
-if (
-  params.get("success")
-  === "true"
-) {
-
-  alert(
-    "✅ Thanh toán thành công!"
-  );
-
-  window.history.replaceState(
-    {},
-    document.title,
-    window.location.pathname
-  );
-
-}
-
-if (
-  params.get("cancel")
-  === "true"
-) {
-
-  alert(
-    "❌ Đã hủy thanh toán"
-  );
-
-  window.history.replaceState(
-    {},
-    document.title,
-    window.location.pathname
-  );
-
-}
-</script>
   </script>
 </body>
 </html>
